@@ -24,3 +24,13 @@ Key features include adaptive chunking for dynamic text management, multi-docume
 11. **Continuous Conversation**: Users can continue the conversation, with each query repeating the search and response process.
 12. **Session Management**: Track and maintain user chat history and document context for ongoing sessions.
 13. **End of Session**: User ends the chat or the session times out, with the option to download chat logs or responses.
+
+
+13. End of Session
+The user can end the conversation, and the session is terminated. The chat logs or responses can optionally be downloaded.
+
+python
+Copy code
+# Django Session Termination Example
+def end_session(request):
+    del request.session['chat_history']
