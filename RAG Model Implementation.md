@@ -106,3 +106,70 @@ RAG is ideal for applications requiring contextually accurate and up-to-date inf
 
 By integrating retrieval techniques with LLMs, RAG represents a major advancement in AI, bridging the gap between generative language capabilities and external knowledge, thus paving the way for more reliable and contextually grounded AI interactions.
 
+
+
+
+
+
+
+
+
+# Project Flow Explanation
+
+The project diagram illustrates a multi-step pipeline for handling complex queries, involving different database types, query translation, routing, retrieval, indexing, and generation to provide precise answers. Here’s a step-by-step breakdown of each component:
+
+## 1. Query Construction
+This stage focuses on interpreting natural language questions and translating them into structured queries for various database types.
+
+- **Relational DBs**: The system uses Text-to-SQL to convert natural language into SQL queries, leveraging PGVector to store and manage embeddings in a relational database.
+- **GraphDBs**: For graph databases, Text-to-Cypher converts natural language to Cypher queries, which is the query language for GraphDBs, enabling complex relationship querying.
+- **VectorDBs**: A self-query retriever auto-generates metadata filters from the question, facilitating efficient retrieval of relevant vectors.
+
+## 2. Query Translation
+This component translates the user question into a form better suited for retrieval.
+
+- **Techniques**:
+  - **Multi-query**: Generate multiple variations of the question.
+  - **RAG-Fusion**: Combine relevant documents to form a more coherent answer.
+  - **Decomposition**: Break down complex questions into simpler parts.
+  - **Step-back**: Rephrase or abstract the question.
+  - **HyDE (Hypothetical Document Embeddings)**: Convert questions into hypothetical documents for enhanced retrieval accuracy.
+
+## 3. Routing
+Routing determines the pathway a question should take through the system to maximize the accuracy of the response.
+
+- **Logical Routing**: This step enables the model to select the appropriate database based on the nature of the question (e.g., relational, graph, vector).
+- **Semantic Routing**: Uses prompt engineering to embed the question and select the best prompt or model for similarity, thereby choosing the most relevant prompt based on the context.
+
+## 4. Retrieval
+The retrieval stage fetches relevant information from databases, applying ranking and refinement techniques.
+
+- **Ranking**: This includes re-ranking or filtering documents by relevance using methods like Re-Rank, RankGPT, and RAG-Fusion.
+- **Refinement**: Document compression or filtering further enhances response relevance.
+- **Active Retrieval**: If the initial results are not satisfactory, the system can actively re-retrieve data from other sources, including web or other external databases.
+
+## 5. Indexing
+Indexing is critical for efficient retrieval, organizing information in a way that can be quickly accessed by the system.
+
+- **Chunk Optimization**: The semantic splitter divides documents by characters, sections, or semantic delimiters to ensure optimal chunk size for embedding.
+- **Multi-Representation Indexing**: Converts documents into multiple representations, like summaries or dense embeddings, making them easier to retrieve.
+- **Specialized Embeddings**: Uses advanced embeddings, often fine-tuned, to capture nuanced meanings in specific domains.
+- **Hierarchical Indexing**: Creates a structured summary hierarchy using RAPTOR, which organizes information at various abstraction levels for efficient access.
+
+## 6. Generation
+The generation step synthesizes the final answer based on the retrieved and processed information.
+
+- **Self-RAG and RRR (Retrieval-Refinement-Ranking)**: The model uses the quality of the generated answer to determine if further re-writing or re-retrieval is necessary, thereby ensuring an accurate and concise response.
+
+## Flow Summary
+
+1. **Question Input**: A question enters the system and goes through query construction based on the appropriate database type.
+2. **Query Translation**: The question is translated into a form optimized for retrieval.
+3. **Routing**: The question is routed through logical and semantic pathways to find the most relevant prompt and database.
+4. **Retrieval**: Relevant documents are fetched and refined to ensure accuracy.
+5. **Indexing**: Documents are organized and indexed for faster access.
+6. **Answer Generation**: The system synthesizes an answer based on the retrieved information, refining as necessary.
+
+This structured flow ensures that the system can handle complex, multi-source queries effectively and provides precise answers tailored to the question’s requirements.
+
+
