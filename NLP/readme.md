@@ -60,3 +60,6 @@ The bootcamp is divided into four distinct phases, each focusing on a critical a
 - **Phase Advancement Rule:** Only those who successfully complete **Phase 1** will proceed to **Phase 2**, and so on.
 
 **Final Goal:** Deliver a fully functional, end-to-end project with preprocessing, modeling, UI, and deployment.
+
+
+### Dataset : https://drive.google.com/drive/folders/1GDCFn1_EB7qO-UUJdFpYN27PiKxgLYkX?usp=sharing
