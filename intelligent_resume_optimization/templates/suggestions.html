@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Suggestions</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Resume Optimization Suggestions</h1>
+    <div>
+        <h2>Your Suggestions:</h2>
+        <ul>
+            {% for suggestion in suggestions %}
+            <li>{{ suggestion }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="/">Back to Home</a> |
+    <a href="/scoring">View Scoring</a>
+</body>
+</html> 

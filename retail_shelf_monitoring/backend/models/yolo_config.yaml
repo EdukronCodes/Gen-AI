@@ -1,0 +1,53 @@
+# YOLOv8 configuration for retail shelf monitoring
+path: ../data  # dataset root dir
+train: images/train  # train images (relative to 'path')
+val: images/val  # val images (relative to 'path')
+
+# Classes
+names:
+  0: product
+  1: empty_shelf
+  2: misplaced_product
+  3: price_tag
+  4: shelf_edge
+
+# Training parameters
+epochs: 100
+batch_size: 16
+imgsz: 640
+device: 0  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+workers: 8
+patience: 50  # early stopping patience
+save: True  # save best checkpoint
+save_period: 10  # save checkpoint every x epochs
+cache: False  # cache images in memory
+exist_ok: False  # existing project/name ok, do not increment
+pretrained: True  # use pretrained model
+optimizer: auto  # optimizer (SGD, Adam, etc.)
+verbose: True  # print verbose output
+seed: 0  # random seed for reproducibility
+deterministic: True  # deterministic training
+single_cls: False  # train as single-class dataset
+image_weights: False  # use weighted image selection for training
+rect: False  # rectangular training
+cos_lr: False  # cosine learning rate scheduler
+close_mosaic: 10  # disable mosaic augmentation for final 10 epochs
+resume: False  # resume training from last checkpoint
+amp: True  # automatic mixed precision
+lr0: 0.01  # initial learning rate
+lrf: 0.01  # final learning rate
+momentum: 0.937  # SGD momentum/Adam beta1
+weight_decay: 0.0005  # optimizer weight decay
+warmup_epochs: 3.0  # warmup epochs
+warmup_momentum: 0.8  # warmup momentum
+warmup_bias_lr: 0.1  # warmup bias learning rate
+box: 7.5  # box loss gain
+cls: 0.5  # cls loss gain
+dfl: 1.5  # dfl loss gain
+fl_gamma: 0.0  # focal loss gamma
+label_smoothing: 0.0  # label smoothing epsilon
+nbs: 64  # nominal batch size
+overlap_mask: True  # masks should overlap during training
+mask_ratio: 4  # mask downsample ratio
+dropout: 0.0  # use dropout regularization
+val: True  # validate training results 

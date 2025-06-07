@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Intelligent Resume Optimization</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Intelligent Resume Optimization Tool</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file">Upload Resume (PDF/CSV):</label>
+        <input type="file" name="file" id="file" required>
+        <button type="submit">Upload</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <a href="/scoring">View Scoring</a> |
+    <a href="/suggestions">View Suggestions</a>
+</body>
+</html> 

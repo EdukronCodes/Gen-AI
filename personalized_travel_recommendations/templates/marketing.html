@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketing Campaign</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Marketing Campaign Optimization</h1>
+    <form method="post">
+        <label>Enter Campaign Features (comma separated):</label>
+        <input type="text" name="features" placeholder="e.g. 25,50000,3">
+        <button type="submit">Predict</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <a href="/">Back to Home</a> |
+    <a href="/recommendations">View Recommendations</a>
+</body>
+</html> 
