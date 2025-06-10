@@ -1,107 +1,68 @@
-# Customer Churn Classification for Online Retailer
+# Retail Analytics Projects
 
-This project implements a machine learning system to predict customer churn for an online retailer. It uses customer behavior data to identify patterns that indicate a customer is likely to stop using the service.
+This repository contains four distinct retail analytics projects, each following a comprehensive data science workflow:
 
-## Features
+1. **Generative AI for Personalized Retail Marketing**
+   - Location: `generative_ai_marketing/`
+   - Purpose: Create personalized marketing content using generative AI
 
-- Customer behavior analysis
-- Churn prediction using machine learning
-- Real-time churn risk scoring
-- Customer retention recommendations
-- Interactive dashboard for monitoring
-- API endpoints for integration
+2. **Computer Vision for Retail Shelf Management**
+   - Location: `shelf_management/`
+   - Purpose: Monitor and analyze retail shelf conditions using computer vision
 
-## Tech Stack
+3. **NLP-Based Customer Sentiment Analysis**
+   - Location: `sentiment_analysis/`
+   - Purpose: Analyze customer feedback and reviews using NLP
 
-- Backend: Python, Django, Django REST Framework
-- Frontend: React, Material-UI
-- Database: PostgreSQL
-- Machine Learning: Scikit-learn, Pandas, NumPy
-- Visualization: Plotly, Chart.js
+4. **Customer Churn Prediction**
+   - Location: `churn_prediction/`
+   - Purpose: Predict customer churn using machine learning
 
 ## Project Structure
 
+Each project follows this structure:
 ```
-customer_churn_classification/
-├── backend/
-│   ├── api/
-│   │   ├── views.py
-│   │   ├── urls.py
-│   │   └── serializers.py
-│   ├── models/
-│   │   ├── customer.py
-│   │   └── transaction.py
-│   ├── services/
-│   │   ├── churn_predictor.py
-│   │   └── data_processor.py
-│   ├── ml_models/
-│   │   ├── train_model.py
-│   │   └── predict.py
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── utils/
-│   └── package.json
-└── data/
-    ├── raw/
-    └── processed/
+project_name/
+├── data/                  # Data storage
+├── notebooks/            # Jupyter notebooks for analysis
+├── src/                  # Source code
+│   ├── data/            # Data processing scripts
+│   ├── features/        # Feature engineering
+│   ├── models/          # Model training and evaluation
+│   └── utils/           # Utility functions
+├── tests/               # Unit tests
+├── requirements.txt     # Project dependencies
+└── README.md           # Project-specific documentation
 ```
 
 ## Setup Instructions
 
-1. Clone the repository
-2. Set up the backend:
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   python manage.py migrate
-   python manage.py runserver
-   ```
+1. Create a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-3. Set up the frontend:
-   ```bash
-   cd frontend
-   npm install
-   npm start
-   ```
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-4. Train the model:
-   ```bash
-   cd backend
-   python ml_models/train_model.py
-   ```
+## Project Workflow
 
-## API Endpoints
+Each project follows a 10-phase workflow:
+1. Problem Definition & Goal Setting
+2. Data Acquisition
+3. Exploratory Data Analysis (EDA)
+4. Data Preprocessing & Cleaning
+5. Feature Selection & Dimensionality Reduction
+6. Model Building
+7. Model Evaluation
+8. Model Deployment
+9. Monitoring & Maintenance
+10. Documentation & Reporting
 
-- `GET /api/customers/` - List all customers
-- `GET /api/customers/{id}/` - Get customer details
-- `POST /api/customers/{id}/predict-churn/` - Predict churn probability
-- `GET /api/customers/churn-stats/` - Get churn statistics
+## Requirements
 
-## Model Features
-
-The churn prediction model uses the following features:
-- Purchase frequency
-- Average order value
-- Days since last purchase
-- Customer lifetime value
-- Product category preferences
-- Customer service interactions
-- Website engagement metrics
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License. 
+- Python 3.8+
+- See individual project requirements.txt files for specific dependencies 
