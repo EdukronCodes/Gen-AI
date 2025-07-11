@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(214, 84%, 56%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(159, 73%, 44%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(45, 96%, 53%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom retail colors */
+  --chat-bg: hsl(213, 100%, 98%);
+  --user-message: hsl(214, 84%, 56%);
+  --bot-message: hsl(0, 0%, 100%);
+  --sidebar-bg: hsl(217, 33%, 17%);
+  --success: hsl(159, 73%, 44%);
+  --warning: hsl(36, 100%, 43%);
+  --error: hsl(0, 84%, 60%);
+  --neutral: hsl(220, 8%, 46%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(214, 84%, 56%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .chat-bg {
+    background-color: var(--chat-bg);
+  }
+  
+  .user-message-bg {
+    background-color: var(--user-message);
+  }
+  
+  .bot-message-bg {
+    background-color: var(--bot-message);
+  }
+  
+  .sidebar-bg {
+    background-color: var(--sidebar-bg);
+  }
+  
+  .success-color {
+    color: var(--success);
+  }
+  
+  .warning-color {
+    color: var(--warning);
+  }
+  
+  .error-color {
+    color: var(--error);
+  }
+  
+  .neutral-color {
+    color: var(--neutral);
+  }
+}
+
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce 1s infinite;
+  }
+}
