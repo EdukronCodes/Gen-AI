@@ -1,0 +1,312 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ml_labs
+      POSTGRES_USER: ml_user
+      POSTGRES_PASSWORD: ml_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ml_labs_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ml_labs_network
+
+  # Medical Chatbot Service
+  medical_chatbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/chroma_db
+    volumes:
+      - medical_chatbot_data:/app/chroma_db
+      - medical_knowledge:/app/medical_knowledge
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Drug Toxicity Classification Service
+  drug_toxicity:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/toxicity_chroma_db
+    volumes:
+      - drug_toxicity_data:/app/toxicity_chroma_db
+      - toxicity_data:/app/data/toxicity
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Resume Optimization Service
+  resume_optimizer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/resume_chroma_db
+    volumes:
+      - resume_optimizer_data:/app/resume_chroma_db
+      - job_market_data:/app/data/job_market
+      - uploads:/app/uploads
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Patient Stratification Service
+  patient_stratification:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/patient_chroma_db
+    volumes:
+      - patient_stratification_data:/app/patient_chroma_db
+      - patient_data:/app/data/patients
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Surgical Instrument Recognition Service
+  surgical_recognition:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/surgical_chroma_db
+    volumes:
+      - surgical_recognition_data:/app/surgical_chroma_db
+      - surgical_data:/app/data/surgical
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Customer Support Chatbot Service
+  customer_support:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8005"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/customer_support_chroma_db
+    volumes:
+      - customer_support_data:/app/customer_support_chroma_db
+      - product_data:/app/data/products
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Insurance Fraud Detection Service
+  fraud_detection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8006"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/fraud_chroma_db
+    volumes:
+      - fraud_detection_data:/app/fraud_chroma_db
+      - insurance_data:/app/data/insurance
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Retail Analytics Service
+  retail_analytics:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8007:8007"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_DB_PATH=/app/retail_chroma_db
+    volumes:
+      - retail_analytics_data:/app/retail_chroma_db
+      - retail_data:/app/data/retail
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - medical_chatbot
+      - drug_toxicity
+      - resume_optimizer
+      - patient_stratification
+      - surgical_recognition
+      - customer_support
+      - fraud_detection
+      - retail_analytics
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Monitoring and Logging
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Celery Worker for Background Tasks
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A app.celery worker --loglevel=info
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+  # Celery Beat for Scheduled Tasks
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A app.celery beat --loglevel=info
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://ml_user:ml_password@postgres:5432/ml_labs
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - ml_labs_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  medical_chatbot_data:
+  drug_toxicity_data:
+  resume_optimizer_data:
+  patient_stratification_data:
+  surgical_recognition_data:
+  customer_support_data:
+  fraud_detection_data:
+  retail_analytics_data:
+  medical_knowledge:
+  toxicity_data:
+  job_market_data:
+  patient_data:
+  surgical_data:
+  product_data:
+  insurance_data:
+  retail_data:
+  uploads:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  ml_labs_network:
+    driver: bridge 
