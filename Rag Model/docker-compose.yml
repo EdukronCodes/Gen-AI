@@ -1,0 +1,48 @@
+VERSION:'3.8'
+
+SERVICES:
+  FAISS-SERVER:
+    IMAGE: "jinaai/faiss-server:latest"
+    PORTS:
+      - "51000:51000"
+    VOLUMES:
+      - FAISS_DATA: ./faiss_data
+    ENVIRONMENT:
+      - "FAISS_DB_DIR=/data"
+    RESTART: always
+  RAG-APP:
+    BUILD: .
+    PORTS:
+      - "8000:8000"
+    ENVIRONMENT:
+      LLM_MODEL: "gpt-3.5-turbo"
+      VECTOR_STORE: "faiss"
+      EMBEDDING_MODEL: "text-embedding-ada-002"
+      CHROMA_DB_DIR: "./chroma_db"
+      PERSISTENCE: "true"
+      USE_LOCAL_LLM: "false"
+      LLM_API_KEY: "your_openai_api_key"
+      LLM_API_BASE: "https://api.openai.com/v1"
+    VOLUMES:
+      - ./:/app
+      -LOGS: ./logs
+      -CHROMA_DB: ./chroma_db
+    DEPENDS_ON:
+      - FAISS-SERVER
+    ENV_FILE:
+      - .env
+    NGNIX:
+      IMAGE: "nginx:latest"
+      PORTS:
+        - "80:80"
+      VOLUMES:
+        - ./nginx.conf:/etc/nginx/nginx.conf
+      DEPENDS_ON:
+        - RAG-APP
+      RESTART: always
+      PROXY:
+        - "http://rag-app:8000"
+        - "HTTP"//GENERATE-APP:8501"
+      RESTART: always
+      PROFILES: ["nginx"]
+    
