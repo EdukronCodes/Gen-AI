@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PDF GDPR QA</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .row { margin-bottom: 10px; }
+    #chat { width: 100%; height: 240px; border: 1px solid #ccc; padding: 8px; overflow: auto; white-space: pre-wrap; }
+    input, button { padding: 6px; }
+  </style>
+  </head>
+<body>
+  <h2>Login / Register</h2>
+  <div class="row">
+    <input id="username" placeholder="username" />
+    <input id="password" type="password" placeholder="password" />
+    <button onclick="register()">Register</button>
+    <button onclick="login()">Login</button>
+    <span id="authStatus"></span>
+  </div>
+
+  <h2>Ingest PDFs</h2>
+  <div class="row">
+    <input id="root" placeholder="optional root path (defaults to output/processed, output/images_as_pdfs)" style="width: 500px;" />
+    <button onclick="ingest()">Ingest</button>
+    <span id="ingestStatus"></span>
+  </div>
+
+  <h2>Chat</h2>
+  <div id="chat"></div>
+  <div class="row">
+    <input id="question" placeholder="Ask a question about your PDFs" style="width: 600px;" />
+    <button onclick="ask()">Send</button>
+  </div>
+
+  <script>
+    let token = null;
+    const api = '';
+
+    function setStatus(id, text) { document.getElementById(id).innerText = text; }
+    function appendChat(role, text) {
+      const el = document.getElementById('chat');
+      el.textContent += `\n${role}: ${text}`;
+      el.scrollTop = el.scrollHeight;
+    }
+
+    async function register() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const fd = new FormData(); fd.append('username', username); fd.append('password', password);
+      const res = await fetch(api + '/auth/register', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.token) { token = data.token; setStatus('authStatus', 'Registered.'); } else { setStatus('authStatus', 'Failed.'); }
+    }
+
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const fd = new FormData(); fd.append('username', username); fd.append('password', password);
+      const res = await fetch(api + '/auth/login', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.token) { token = data.token; setStatus('authStatus', 'Logged in.'); } else { setStatus('authStatus', 'Failed.'); }
+    }
+
+    async function ingest() {
+      if (!token) { setStatus('ingestStatus', 'Login first'); return; }
+      const root = document.getElementById('root').value;
+      const fd = new FormData(); fd.append('token', token); if (root) fd.append('root', root);
+      const res = await fetch(api + '/ingest', { method: 'POST', body: fd });
+      const data = await res.json();
+      setStatus('ingestStatus', `Added: ${data.added || 0}, Skipped: ${data.skipped || 0}`);
+    }
+
+    async function ask() {
+      if (!token) { appendChat('system', 'Login first'); return; }
+      const q = document.getElementById('question').value;
+      appendChat('you', q);
+      const fd = new FormData(); fd.append('token', token); fd.append('question', q);
+      const res = await fetch(api + '/ask', { method: 'POST', body: fd });
+      const data = await res.json();
+      appendChat('bot', data.answer || '(no answer)');
+      if (data.sources) appendChat('sources', JSON.stringify(data.sources));
+    }
+  </script>
+</body>
+</html>
+
+

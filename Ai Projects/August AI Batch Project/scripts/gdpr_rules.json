@@ -1,0 +1,67 @@
+{
+	"version": "1.0",
+	"categories": [
+		{
+			"id": "email",
+			"name": "Email Address",
+			"examples": ["john.doe@example.com", "user.name+tag@domain.co"],
+			"regex_hint": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+		},
+		{
+			"id": "phone",
+			"name": "Phone Number",
+			"examples": ["+1 312 555 0123", "(020) 7946 0958"],
+			"regex_hint": "(?:(?:\\+\\d{1,3}[\\s-])?(?:\\(\\d{2,4}\\)[\\s-]?)?\\d{3,4}[\\s-]?\\d{3,4}(?:[\\s-]?\\d{3,4})?)"
+		},
+		{
+			"id": "ssn",
+			"name": "US SSN",
+			"examples": ["123-45-6789"],
+			"regex_hint": "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+		},
+		{
+			"id": "passport",
+			"name": "Passport Number",
+			"examples": ["XJ9034451", "AA1234567"],
+			"regex_hint": "\\b[A-Z]{1,2}\\d{6,9}\\b"
+		},
+		{
+			"id": "iban",
+			"name": "IBAN",
+			"examples": ["GB29NWBK60161331926819"],
+			"regex_hint": "\\b[A-Z]{2}\\d{2}[A-Z0-9]{10,30}\\b"
+		},
+		{
+			"id": "card",
+			"name": "Payment Card Number",
+			"examples": ["4111 1111 1111 1111", "5500-0000-0000-0004"],
+			"regex_hint": "\\b(?:\\d[ -]*?){13,19}\\b"
+		},
+		{
+			"id": "name",
+			"name": "Person Name",
+			"examples": ["John Doe", "Jane A. Smith"],
+			"regex_hint": "\\b[A-Z][a-z]+(?:\\s+[A-Z][a-z]+){1,3}\\b"
+		},
+		{
+			"id": "amount",
+			"name": "Currency Amount",
+			"examples": ["$1,234.56", "INR 12,000", "EUR 99.00"],
+			"regex_hint": "\\b(?:USD|INR|EUR|GBP|\\$|₹|€|£)?\\s?\\d{1,3}(?:[, ]\\d{3})*(?:\\.\\d{2})?\\b"
+		},
+		{
+			"id": "address",
+			"name": "Postal Address",
+			"examples": ["742 Evergreen Terrace, Springfield"],
+			"regex_hint": null
+		},
+		{
+			"id": "dob",
+			"name": "Date of Birth",
+			"examples": ["1990-04-18", "18/04/1990"],
+			"regex_hint": "\\b(?:\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4})\\b"
+		}
+	]
+}
+
+
