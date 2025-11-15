@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-022",
+  "customer_name": "Uma Nguyen",
+  "order_id": "ORD202511-00022",
+  "product": {
+    "sku": "BKS-007",
+    "name": "Bestseller Fiction Novel",
+    "category": "Books"
+  },
+  "title": "Account/Login Problem",
+  "complaint_description": "Customer cannot access their account; receives error: Token expired.",
+  "date_reported": "2025-10-30",
+  "customer_sentiment": "angry",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Offer temporary access link valid for 1 hour while we troubleshoot.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #7311. Follow-up in 24-48 hours.",
+  "priority": "High"
+}

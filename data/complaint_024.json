@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-024",
+  "customer_name": "Wen Wang",
+  "order_id": "ORD202511-00024",
+  "product": {
+    "sku": "CLN-009",
+    "name": "Cordless Vacuum",
+    "category": "Home Appliances"
+  },
+  "title": "Late Delivery",
+  "complaint_description": "Order did not arrive by the promised delivery date (2025-11-13). Customer still waiting.",
+  "date_reported": "2025-10-28",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Check carrier tracking, provide updated ETA, and offer 10% refund or coupon for future purchase. If lost, reorder item with expedited shipping.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #6279. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-037",
+  "customer_name": "George Smith",
+  "order_id": "ORD202511-00037",
+  "product": {
+    "sku": "KTC-004",
+    "name": "12-piece Cookware Set",
+    "category": "Home & Kitchen"
+  },
+  "title": "Billing Issue",
+  "complaint_description": "Customer was charged incorrectly: charged $415.00 for order total $18.00.",
+  "date_reported": "2025-11-06",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Pending",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "If duplicate charge, reverse duplicate immediately and notify bank.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #7046. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

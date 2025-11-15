@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-075",
+  "customer_name": "Carlos Garcia",
+  "order_id": "ORD202511-00075",
+  "product": {
+    "sku": "GAD-008",
+    "name": "Smart Home Hub",
+    "category": "Electronics"
+  },
+  "title": "Return/Refund Request",
+  "complaint_description": "Customer wants to return item and request refund due to wrong size.",
+  "date_reported": "2025-11-04",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "If out of return window, offer store credit and explain policy.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #2215. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

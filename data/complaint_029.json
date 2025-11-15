@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-029",
+  "customer_name": "Noah Martinez",
+  "order_id": "ORD202511-00029",
+  "product": {
+    "sku": "ACC-006",
+    "name": "Leather Wallet",
+    "category": "Accessories"
+  },
+  "title": "Account/Login Problem",
+  "complaint_description": "Customer cannot access their account; receives error: Invalid credentials.",
+  "date_reported": "2025-11-04",
+  "customer_sentiment": "frustrated",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Offer temporary access link valid for 1 hour while we troubleshoot.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #7389. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-004",
+  "customer_name": "Deepa Martinez",
+  "order_id": "ORD202511-00004",
+  "product": {
+    "sku": "SPT-005",
+    "name": "Trail Running Shoes",
+    "category": "Footwear"
+  },
+  "title": "Return/Refund Request",
+  "complaint_description": "Customer wants to return item and request refund due to found a defect.",
+  "date_reported": "2025-11-07",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Provide return authorization, pre-paid label, and process refund within 3 business days of receiving returned item.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #4598. Follow-up in 24-48 hours.",
+  "priority": "High"
+}

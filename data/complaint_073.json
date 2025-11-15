@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-073",
+  "customer_name": "Maya Khan",
+  "order_id": "ORD202511-00073",
+  "product": {
+    "sku": "ACC-006",
+    "name": "Leather Wallet",
+    "category": "Accessories"
+  },
+  "title": "Late Delivery",
+  "complaint_description": "Order did not arrive by the promised delivery date (2025-11-14). Customer still waiting.",
+  "date_reported": "2025-10-23",
+  "customer_sentiment": "frustrated",
+  "resolution_status": "In Progress",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "If delivery delayed beyond 7 days, offer full refund and free return label.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #4630. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

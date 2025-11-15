@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-055",
+  "customer_name": "Jia Patel",
+  "order_id": "ORD202511-00055",
+  "product": {
+    "sku": "BKS-007",
+    "name": "Bestseller Fiction Novel",
+    "category": "Books"
+  },
+  "title": "Return/Refund Request",
+  "complaint_description": "Customer wants to return item and request refund due to wrong size.",
+  "date_reported": "2025-10-23",
+  "customer_sentiment": "concerned",
+  "resolution_status": "In Progress",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Provide return authorization, pre-paid label, and process refund within 3 business days of receiving returned item.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #5689. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

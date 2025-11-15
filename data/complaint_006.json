@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-006",
+  "customer_name": "Elena Patel",
+  "order_id": "ORD202511-00006",
+  "product": {
+    "sku": "CLN-009",
+    "name": "Cordless Vacuum",
+    "category": "Home Appliances"
+  },
+  "title": "Account/Login Problem",
+  "complaint_description": "Customer cannot access their account; receives error: Token expired.",
+  "date_reported": "2025-11-11",
+  "customer_sentiment": "neutral",
+  "resolution_status": "In Progress",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Reset password flow, verify identity, check account lockouts and guide the user step-by-step. If issue persists, escalate to engineering with log details.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #7916. Follow-up in 24-48 hours.",
+  "priority": "High"
+}

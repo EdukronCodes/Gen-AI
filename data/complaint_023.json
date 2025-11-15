@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-023",
+  "customer_name": "George Wang",
+  "order_id": "ORD202511-00023",
+  "product": {
+    "sku": "TSH-001",
+    "name": "Classic Cotton T-Shirt",
+    "category": "Apparel"
+  },
+  "title": "Billing Issue",
+  "complaint_description": "Customer was charged incorrectly: charged $45.00 for order total $495.00.",
+  "date_reported": "2025-10-25",
+  "customer_sentiment": "concerned",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "If duplicate charge, reverse duplicate immediately and notify bank.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #6344. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

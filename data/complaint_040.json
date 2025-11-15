@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-040",
+  "customer_name": "Elena Lee",
+  "order_id": "ORD202511-00040",
+  "product": {
+    "sku": "GAD-008",
+    "name": "Smart Home Hub",
+    "category": "Electronics"
+  },
+  "title": "Damaged on Arrival",
+  "complaint_description": "Product arrived damaged: units leaking liquid.",
+  "date_reported": "2025-11-03",
+  "customer_sentiment": "concerned",
+  "resolution_status": "In Progress",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Ask for photos of damage, provide immediate replacement or full refund, and arrange pickup of damaged unit if needed.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #2213. Follow-up in 24-48 hours.",
+  "priority": "High"
+}

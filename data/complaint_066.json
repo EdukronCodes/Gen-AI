@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-066",
+  "customer_name": "Olivia Martinez",
+  "order_id": "ORD202511-00066",
+  "product": {
+    "sku": "BKS-007",
+    "name": "Bestseller Fiction Novel",
+    "category": "Books"
+  },
+  "title": "Damaged on Arrival",
+  "complaint_description": "Product arrived damaged: detached handle.",
+  "date_reported": "2025-11-12",
+  "customer_sentiment": "frustrated",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Ask for photos of damage, provide immediate replacement or full refund, and arrange pickup of damaged unit if needed.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #3131. Follow-up in 24-48 hours.",
+  "priority": "High"
+}

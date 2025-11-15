@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-090",
+  "customer_name": "Tomas Johnson",
+  "order_id": "ORD202511-00090",
+  "product": {
+    "sku": "BKS-007",
+    "name": "Bestseller Fiction Novel",
+    "category": "Books"
+  },
+  "title": "Late Delivery",
+  "complaint_description": "Order did not arrive by the promised delivery date (2025-11-15). Customer still waiting.",
+  "date_reported": "2025-10-23",
+  "customer_sentiment": "neutral",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "If delivery delayed beyond 7 days, offer full refund and free return label.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #1510. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

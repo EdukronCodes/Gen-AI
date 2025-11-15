@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-100",
+  "customer_name": "Farah Brown",
+  "order_id": "ORD202511-00100",
+  "product": {
+    "sku": "TYS-010",
+    "name": "Kids Toy Set",
+    "category": "Toys"
+  },
+  "title": "Sizing Issue",
+  "complaint_description": "Item size does not match description (ordered XL, received M).",
+  "date_reported": "2025-11-04",
+  "customer_sentiment": "angry",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Provide free return for exchange; include sizing guide and recommend alternate size based on measurements.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #1828. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

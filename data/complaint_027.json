@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-027",
+  "customer_name": "Ravi Patel",
+  "order_id": "ORD202511-00027",
+  "product": {
+    "sku": "HDP-002",
+    "name": "Noise-Cancelling Headphones",
+    "category": "Electronics"
+  },
+  "title": "Return/Refund Request",
+  "complaint_description": "Customer wants to return item and request refund due to delivered late.",
+  "date_reported": "2025-10-31",
+  "customer_sentiment": "concerned",
+  "resolution_status": "Pending",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Provide return authorization, pre-paid label, and process refund within 3 business days of receiving returned item.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #5246. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

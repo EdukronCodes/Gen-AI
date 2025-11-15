@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-054",
+  "customer_name": "Sara Garcia",
+  "order_id": "ORD202511-00054",
+  "product": {
+    "sku": "KTC-004",
+    "name": "12-piece Cookware Set",
+    "category": "Home & Kitchen"
+  },
+  "title": "Return/Refund Request",
+  "complaint_description": "Customer wants to return item and request refund due to changed mind.",
+  "date_reported": "2025-11-06",
+  "customer_sentiment": "concerned",
+  "resolution_status": "Escalated",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "If out of return window, offer store credit and explain policy.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #5097. Follow-up in 24-48 hours.",
+  "priority": "Medium"
+}

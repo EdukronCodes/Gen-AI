@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-061",
+  "customer_name": "Liam Nguyen",
+  "order_id": "ORD202511-00061",
+  "product": {
+    "sku": "ACC-006",
+    "name": "Leather Wallet",
+    "category": "Accessories"
+  },
+  "title": "Wrong Item Delivered",
+  "complaint_description": "Customer received a different item than ordered. Expected Leather Wallet, but received Smart Home Hub.",
+  "date_reported": "2025-11-11",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Offer full refund if customer prefers; follow up when return tracking shows item received.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #4362. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

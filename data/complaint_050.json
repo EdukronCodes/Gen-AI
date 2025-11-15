@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-050",
+  "customer_name": "Olivia Brown",
+  "order_id": "ORD202511-00050",
+  "product": {
+    "sku": "KTC-004",
+    "name": "12-piece Cookware Set",
+    "category": "Home & Kitchen"
+  },
+  "title": "Missing Parts/Accessories",
+  "complaint_description": "Main product arrived but missing accessory: charging cable.",
+  "date_reported": "2025-11-11",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Escalated",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Offer refund for accessory or replacement of entire unit if accessory required for use.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #6439. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

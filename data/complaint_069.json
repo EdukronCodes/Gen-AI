@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-069",
+  "customer_name": "Aisha Garcia",
+  "order_id": "ORD202511-00069",
+  "product": {
+    "sku": "BLD-003",
+    "name": "Ergo Office Chair",
+    "category": "Furniture"
+  },
+  "title": "Product Not As Described",
+  "complaint_description": "Product differs from online description: smaller than expected.",
+  "date_reported": "2025-10-23",
+  "customer_sentiment": "frustrated",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Offer return/refund or replacement, investigate listing accuracy and update product page if incorrect; give 15% coupon for future purchase.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #2391. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

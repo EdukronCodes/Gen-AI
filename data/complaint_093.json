@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-093",
+  "customer_name": "Priya Patel",
+  "order_id": "ORD202511-00093",
+  "product": {
+    "sku": "HDP-002",
+    "name": "Noise-Cancelling Headphones",
+    "category": "Electronics"
+  },
+  "title": "Late Delivery",
+  "complaint_description": "Order did not arrive by the promised delivery date (2025-11-08). Customer still waiting.",
+  "date_reported": "2025-10-17",
+  "customer_sentiment": "neutral",
+  "resolution_status": "Pending",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Check carrier tracking, provide updated ETA, and offer 10% refund or coupon for future purchase. If lost, reorder item with expedited shipping.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #6922. Follow-up in 24-48 hours.",
+  "priority": "High"
+}

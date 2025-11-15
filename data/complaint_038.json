@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-038",
+  "customer_name": "Ravi Nguyen",
+  "order_id": "ORD202511-00038",
+  "product": {
+    "sku": "ACC-006",
+    "name": "Leather Wallet",
+    "category": "Accessories"
+  },
+  "title": "Billing Issue",
+  "complaint_description": "Customer was charged incorrectly: charged $138.00 for order total $128.00.",
+  "date_reported": "2025-10-16",
+  "customer_sentiment": "neutral",
+  "resolution_status": "Pending",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Review transaction logs and provide corrected refund for the overcharge within 3-5 business days; apologize and offer $5 credit.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #4138. Follow-up in 24-48 hours.",
+  "priority": "Low"
+}

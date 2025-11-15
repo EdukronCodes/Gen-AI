@@ -1,0 +1,23 @@
+{
+  "id": "TKT-20251115-070",
+  "customer_name": "Elena Garcia",
+  "order_id": "ORD202511-00070",
+  "product": {
+    "sku": "TYS-010",
+    "name": "Kids Toy Set",
+    "category": "Toys"
+  },
+  "title": "Wrong Item Delivered",
+  "complaint_description": "Customer received a different item than ordered. Expected Kids Toy Set, but received Noise-Cancelling Headphones.",
+  "date_reported": "2025-11-06",
+  "customer_sentiment": "satisfied",
+  "resolution_status": "Resolved",
+  "resolution_steps": [
+    "Acknowledge message and apologize for inconvenience.",
+    "Request any required proof (photos, order number).",
+    "Offer full refund if customer prefers; follow up when return tracking shows item received.",
+    "Confirm with customer when resolution completed and close the ticket."
+  ],
+  "agent_notes": "Assigned to support agent #8972. Follow-up in 24-48 hours.",
+  "priority": "High"
+}
