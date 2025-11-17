@@ -452,7 +452,158 @@
 
 ---
 
-## Summary
 
-This collection covers fundamental concepts, architectures, training methods, optimization techniques, applications, and advanced topics in Large Language Models. These questions span from basic understanding to cutting-edge research areas, providing comprehensive coverage for LLM interviews.
+# Agentic AI Interview Questions and Answers
 
+## Table of Contents
+1. [Fundamentals & Concepts](#fundamentals--concepts)
+2. [Architecture & Design](#architecture--design)
+3. [Planning & Reasoning](#planning--reasoning)
+4. [Tool Use & Function Calling](#tool-use--function-calling)
+5. [Multi-Agent Systems](#multi-agent-systems)
+6. [Memory & State Management](#memory--state-management)
+7. [Evaluation & Testing](#evaluation--testing)
+8. [Safety & Control](#safety--control)
+9. [Frameworks & Tools](#frameworks--tools)
+10. [Advanced Topics](#advanced-topics)
+
+---
+
+## Fundamentals & Concepts
+
+### Q1: What is Agentic AI?
+**Answer:** Agentic AI refers to AI systems that can autonomously perceive their environment, make decisions, take actions, and achieve goals without constant human intervention. These agents can use tools, interact with external systems, and adapt their behavior based on feedback.
+
+### Q2: What is the difference between traditional AI and Agentic AI?
+**Answer:**
+- **Traditional AI**: Typically responds to single queries, performs one task at a time, requires explicit instructions for each step
+- **Agentic AI**: Can plan multi-step tasks, use tools autonomously, maintain state across interactions, and work toward long-term goals
+
+### Q3: What are the key components of an AI agent?
+**Answer:**
+1. **Perception**: Observing and understanding the environment
+2. **Reasoning**: Processing information and making decisions
+3. **Planning**: Creating sequences of actions to achieve goals
+4. **Action**: Executing tasks using tools or APIs
+5. **Memory**: Storing and retrieving information across interactions
+6. **Learning**: Adapting behavior based on feedback
+
+### Q4: What is an autonomous agent?
+**Answer:** An autonomous agent is an AI system that can operate independently to achieve goals without continuous human oversight. It can make decisions, take actions, and adapt to changing circumstances on its own.
+
+### Q5: What is the difference between reactive and deliberative agents?
+**Answer:**
+- **Reactive agents**: Respond immediately to stimuli without planning (simple, fast, but limited)
+- **Deliberative agents**: Plan ahead, consider consequences, and reason about actions (more capable but slower)
+
+### Q6: What is a goal-oriented agent?
+**Answer:** A goal-oriented agent has specific objectives it works to achieve. It evaluates actions based on how well they move toward the goal and can plan multi-step sequences to accomplish complex tasks.
+
+### Q7: What is the agent-environment interaction loop?
+**Answer:** The loop consists of:
+1. Agent perceives the environment
+2. Agent reasons about the current state
+3. Agent selects an action
+4. Action is executed
+5. Environment changes
+6. Agent receives feedback/observation
+7. Loop repeats
+
+### Q8: What is the difference between single-turn and multi-turn agents?
+**Answer:**
+- **Single-turn**: Responds to one query and completes
+- **Multi-turn**: Maintains conversation context, can handle follow-ups, and builds on previous interactions
+
+### Q9: What is tool use in agentic AI?
+**Answer:** Tool use allows agents to interact with external systems, APIs, databases, or functions beyond text generation. Agents can call tools, process results, and use them to accomplish tasks.
+
+### Q10: What is function calling in LLM-based agents?
+**Answer:** Function calling enables LLMs to identify when to use external tools, select appropriate functions, and format parameters correctly. The model generates function call requests that are executed by the system.
+
+---
+
+## Architecture & Design
+
+### Q11: What is the ReAct (Reasoning + Acting) framework?
+**Answer:** ReAct combines reasoning and acting in a loop. The agent alternates between:
+- **Thought**: Reasoning about what to do
+- **Action**: Executing a tool/function
+- **Observation**: Processing the result
+This creates transparent, interpretable agent behavior.
+
+### Q12: What is the difference between ReAct and Plan-and-Execute?
+**Answer:**
+- **ReAct**: Interleaves reasoning and action, adapts dynamically
+- **Plan-and-Execute**: Creates a full plan first, then executes it sequentially (faster but less adaptive)
+
+### Q13: What is the Reflexion pattern?
+**Answer:** Reflexion adds self-reflection to agents. After actions, the agent evaluates outcomes, identifies mistakes, and updates its strategy. This enables learning from errors without external feedback.
+
+### Q14: What is Tree of Thoughts (ToT)?
+**Answer:** Tree of Thoughts extends chain-of-thought by exploring multiple reasoning paths in parallel. The agent generates multiple thought branches, evaluates them, and selects the best path, improving complex reasoning.
+
+### Q15: What is the difference between single-agent and multi-agent systems?
+**Answer:**
+- **Single-agent**: One agent handles all tasks
+- **Multi-agent**: Multiple specialized agents collaborate, each with specific roles and capabilities
+
+### Q16: What is an agentic workflow?
+**Answer:** An agentic workflow is a sequence of steps where an agent orchestrates multiple tools, decisions, and actions to accomplish a complex task, potentially involving loops, conditionals, and error handling.
+
+### Q17: What is the role of an orchestrator in agent systems?
+**Answer:** An orchestrator coordinates multiple agents or tools, manages workflow execution, handles routing decisions, and ensures proper sequencing of operations in complex multi-step tasks.
+
+### Q18: What is the difference between stateless and stateful agents?
+**Answer:**
+- **Stateless**: Each interaction is independent, no memory of previous interactions
+- **Stateful**: Maintains context, memory, and state across interactions, enabling continuity
+
+### Q19: What is agent memory architecture?
+**Answer:** Agent memory architecture includes:
+- **Short-term memory**: Current conversation context
+- **Long-term memory**: Persistent storage of facts, experiences, user preferences
+- **Episodic memory**: Specific past events
+- **Semantic memory**: General knowledge
+
+### Q20: What is the difference between prompt-based and fine-tuned agents?
+**Answer:**
+- **Prompt-based**: Uses prompting to guide behavior, flexible but may be inconsistent
+- **Fine-tuned**: Model weights updated for specific agent behavior, more consistent but less flexible
+
+---
+
+## Planning & Reasoning
+
+### Q21: What is planning in agentic AI?
+**Answer:** Planning is the process of creating a sequence of actions to achieve a goal. The agent breaks down complex tasks into steps, considers dependencies, and orders actions logically.
+
+### Q22: What is hierarchical planning?
+**Answer:** Hierarchical planning breaks goals into sub-goals at multiple levels of abstraction. High-level plans are refined into detailed action sequences, enabling handling of complex, multi-level tasks.
+
+### Q23: What is dynamic planning?
+**Answer:** Dynamic planning allows agents to replan as circumstances change. Instead of rigidly following an initial plan, the agent adapts when new information arrives or actions fail.
+
+### Q24: What is the difference between forward and backward planning?
+**Answer:**
+- **Forward planning**: Starts from current state, explores actions forward toward goal
+- **Backward planning**: Starts from goal, works backward to find required actions
+
+### Q25: What is chain-of-thought reasoning in agents?
+**Answer:** Chain-of-thought encourages agents to show step-by-step reasoning before taking actions. This improves transparency and helps agents handle complex, multi-step problems.
+
+### Q26: What is self-consistency in agent reasoning?
+**Answer:** Self-consistency involves generating multiple reasoning paths and selecting the most consistent answer. This improves reliability by aggregating diverse reasoning attempts.
+
+### Q27: What is iterative refinement in agent planning?
+**Answer:** Iterative refinement allows agents to start with a rough plan and progressively refine it based on execution results and new information, improving plan quality over iterations.
+
+### Q28: What is the difference between deterministic and probabilistic planning?
+**Answer:**
+- **Deterministic**: Assumes actions have predictable outcomes
+- **Probabilistic**: Considers uncertainty in action outcomes, plans for multiple possible futures
+
+### Q29: What is goal decomposition?
+**Answer:** Goal decomposition breaks high-level goals into smaller, manageable sub-goals. Each sub-goal can be achieved independently or in sequence, making complex tasks tractable.
+
+### Q30: What is plan execution monitoring?
+**Answe
