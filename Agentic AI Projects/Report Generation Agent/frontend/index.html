@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent AI Framework - Query Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question-section {
+            margin-bottom: 30px;
+        }
+
+        .question-section label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .question-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .question-input:focus {
+            outline: none;
+            border-color: #3949ab;
+        }
+
+        .examples {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .examples h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .example-btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 15px;
+            background: #3949ab;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .example-btn:hover {
+            background: #283593;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #3949ab 0%, #283593 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(57, 73, 171, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3949ab;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 5px solid #3949ab;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .result-section.success {
+            border-left-color: #4caf50;
+        }
+
+        .result-section.error {
+            border-left-color: #f44336;
+        }
+
+        .result-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #45a049;
+        }
+
+        .error-message {
+            color: #f44336;
+            padding: 15px;
+            background: #ffebee;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: #1976d2;
+        }
+
+        .agent-status {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .agent-badge {
+            padding: 5px 12px;
+            background: #3949ab;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Multi-Agent AI Framework</h1>
+            <p>Ask questions about the retail banking database and get AI-powered insights</p>
+        </div>
+
+        <div class="content">
+            <div class="question-section">
+                <label for="question">Enter your question:</label>
+                <textarea 
+                    id="question" 
+                    class="question-input" 
+                    rows="4" 
+                    placeholder="e.g., What are the top 5 customers by total account balance?"
+                ></textarea>
+
+                <div class="examples">
+                    <h3>Example Questions:</h3>
+                    <button class="example-btn" onclick="setQuestion('What are the top 5 customers by total account balance?')">
+                        Top customers by balance
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('Show me all active loans with their payment history')">
+                        Active loans
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('What products have the highest sales?')">
+                        Top selling products
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('Which branch has the most employees?')">
+                        Branch employee count
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('Show me customers who have both checking and savings accounts')">
+                        Customers with multiple accounts
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('What is the average transaction amount by account type?')">
+                        Average transaction by type
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('List all products that need restocking (below reorder level)')">
+                        Products needing restock
+                    </button>
+                    <button class="example-btn" onclick="setQuestion('Show me the most reviewed products with their ratings')">
+                        Most reviewed products
+                    </button>
+                </div>
+
+                <button class="submit-btn" onclick="askQuestion()" id="submitBtn">
+                    Ask Question & Generate PDF
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing your question with AI agents...</p>
+                <div class="agent-status">
+                    <span class="agent-badge">Query Agent</span>
+                    <span class="agent-badge">Analysis Agent</span>
+                    <span class="agent-badge">PDF Agent</span>
+                </div>
+            </div>
+
+            <div class="result-section" id="resultSection">
+                <h3 id="resultTitle">Result</h3>
+                <div id="resultContent"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Powered by Multi-Agent AI Framework | Google Gemini AI | SQLite Database</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+
+        function setQuestion(question) {
+            document.getElementById('question').value = question;
+        }
+
+        async function askQuestion() {
+            const question = document.getElementById('question').value.trim();
+            
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+
+            // Show loading, hide result
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('resultSection').classList.remove('active');
+            document.getElementById('submitBtn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/ask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('submitBtn').disabled = false;
+
+                // Show result
+                const resultSection = document.getElementById('resultSection');
+                const resultTitle = document.getElementById('resultTitle');
+                const resultContent = document.getElementById('resultContent');
+
+                resultSection.classList.add('active');
+
+                if (data.status === 'success') {
+                    resultSection.classList.remove('error');
+                    resultSection.classList.add('success');
+                    resultTitle.textContent = '✅ Success!';
+
+                    let html = `
+                        <div class="info-box">
+                            <strong>Query Results:</strong> ${data.query_results_count || 0} records found
+                        </div>
+                    `;
+
+                    if (data.summary) {
+                        html += `
+                            <div class="summary">
+                                <h4>Executive Summary:</h4>
+                                <p>${data.summary.replace(/\n/g, '<br>')}</p>
+                            </div>
+                        `;
+                    }
+
+                    if (data.pdf_path) {
+                        html += `
+                            <a href="${API_BASE_URL}/download/${data.pdf_path}" 
+                               class="download-btn" 
+                               target="_blank">
+                                📄 Download PDF Report
+                            </a>
+                        `;
+                    }
+
+                    resultContent.innerHTML = html;
+                } else {
+                    resultSection.classList.remove('success');
+                    resultSection.classList.add('error');
+                    resultTitle.textContent = '❌ Error';
+                    resultContent.innerHTML = `
+                        <div class="error-message">
+                            <strong>Error:</strong> ${data.error || data.message || 'Unknown error occurred'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('submitBtn').disabled = false;
+
+                const resultSection = document.getElementById('resultSection');
+                resultSection.classList.remove('success');
+                resultSection.classList.add('error');
+                resultSection.classList.add('active');
+                document.getElementById('resultTitle').textContent = '❌ Error';
+                document.getElementById('resultContent').innerHTML = `
+                    <div class="error-message">
+                        <strong>Connection Error:</strong> ${error.message}<br>
+                        Make sure the backend server is running on ${API_BASE_URL}
+                    </div>
+                `;
+            }
+        }
+
+        // Allow Enter key to submit (Ctrl+Enter)
+        document.getElementById('question').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                askQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
+
