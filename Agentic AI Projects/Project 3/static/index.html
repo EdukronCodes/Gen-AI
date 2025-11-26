@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Airlines System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            max-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: #667eea;
+            color: white;
+            margin-left: 20%;
+            text-align: right;
+        }
+
+        .message.agent {
+            background: #e9ecef;
+            color: #333;
+            margin-right: 20%;
+        }
+
+        .message.system {
+            background: #fff3cd;
+            color: #856404;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .message-header {
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .agent-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .agent-card.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .agent-card h3 {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .agent-card p {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.online {
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-indicator.offline {
+            background: #dc3545;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quick-action-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .quick-action-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Multi-Agent Airlines System</h1>
+            <p>Intelligent AI-powered airline assistant with 7 specialized agents</p>
+            <div style="margin-top: 15px;">
+                <span class="status-indicator online" id="statusIndicator"></span>
+                <span id="statusText">System Online</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>💬 Chat with AI Agents</h2>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message system">
+                            <div class="message-header">System</div>
+                            Welcome! I'm your AI airline assistant. I can help you with:
+                            <ul style="margin-top: 10px; text-align: left; display: inline-block;">
+                                <li>Searching for flights</li>
+                                <li>Booking reservations</li>
+                                <li>Check-in services</li>
+                                <li>Flight status updates</li>
+                                <li>Baggage information</li>
+                                <li>Loyalty program queries</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input 
+                            type="text" 
+                            class="chat-input" 
+                            id="chatInput" 
+                            placeholder="Ask me anything about flights, bookings, or airline services..."
+                            onkeypress="if(event.key === 'Enter') sendMessage()"
+                        >
+                        <button class="btn" id="sendBtn" onclick="sendMessage()">Send</button>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="quickAction('Find flights from New York to London')">🔍 Search Flights</button>
+                        <button class="quick-action-btn" onclick="quickAction('What is my baggage allowance?')">🧳 Baggage Info</button>
+                        <button class="quick-action-btn" onclick="quickAction('Check flight status')">✈️ Flight Status</button>
+                        <button class="quick-action-btn" onclick="quickAction('Tell me about loyalty points')">⭐ Rewards</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🤖 Available Agents</h2>
+                <div class="agents-grid" id="agentsGrid">
+                    <div class="agent-card">
+                        <h3>🔍 Flight Search</h3>
+                        <p>Find available flights</p>
+                    </div>
+                    <div class="agent-card">
+                        <h3>🎫 Booking</h3>
+                        <p>Create reservations</p>
+                    </div>
+                    <div class="agent-card">
+                        <h3>💬 Customer Service</h3>
+                        <p>General support</p>
+                    </div>
+                    <div class="agent-card">
+                        <h3>🧳 Baggage</h3>
+                        <p>Baggage policies</p>
+                    </div>
+                    <div class="agent-card">
+                        <h3>✅ Check-in</h3>
+                        <p>Flight check-in</p>
+                    </div>
+                    <div class="agent-card">
+                        <h3>📊 Flight Status</h3>
+                        <p>Real-time updates</p>
+                    </div>
+                    <div class="agent-card">
+                        <h3>⭐ Rewards</h3>
+                        <p>Loyalty program</p>
+                    </div>
+                </div>
+
+                <div class="stats" style="margin-top: 30px;">
+                    <div class="stat-card">
+                        <div class="number" id="totalAgents">7</div>
+                        <div class="label">Active Agents</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="totalQueries">0</div>
+                        <div class="label">Queries Processed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-detect API base URL
+        const API_BASE = window.location.origin;
+        let queryCount = 0;
+        
+        console.log('API Base URL:', API_BASE);
+
+        // Check system health on load
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                const indicator = document.getElementById('statusIndicator');
+                const statusText = document.getElementById('statusText');
+                
+                if (data.status === 'healthy') {
+                    indicator.className = 'status-indicator online';
+                    statusText.textContent = 'System Online - All Agents Ready';
+                } else {
+                    indicator.className = 'status-indicator offline';
+                    statusText.textContent = 'System Offline';
+                }
+            } catch (error) {
+                document.getElementById('statusIndicator').className = 'status-indicator offline';
+                document.getElementById('statusText').textContent = 'System Offline';
+            }
+        }
+
+        // Load agents info
+        async function loadAgents() {
+            try {
+                const response = await fetch(`${API_BASE}/api/agents`);
+                const data = await response.json();
+                
+                const grid = document.getElementById('agentsGrid');
+                grid.innerHTML = '';
+                
+                data.agents.forEach(agent => {
+                    const card = document.createElement('div');
+                    card.className = 'agent-card';
+                    card.innerHTML = `
+                        <h3>${agent.name}</h3>
+                        <p>${agent.description}</p>
+                    `;
+                    card.onclick = () => quickAction(`Use ${agent.name.toLowerCase()}`);
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading agents:', error);
+            }
+        }
+
+        // Send message to API
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Disable input while processing
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loading"></span>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/query`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: message,
+                        context: {}
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Add agent response
+                addMessage(
+                    data.response,
+                    'agent',
+                    data.agent_name || 'AI Agent',
+                    data.routed_to
+                );
+                
+                queryCount++;
+                document.getElementById('totalQueries').textContent = queryCount;
+                
+                // Highlight the agent that responded
+                highlightAgent(data.routed_to);
+                
+            } catch (error) {
+                addMessage(
+                    `Error: ${error.message}. Please make sure the API is running and check the console for details.`,
+                    'system'
+                );
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send';
+            }
+        }
+
+        // Add message to chat
+        function addMessage(text, type, agentName = null, routedTo = null) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            if (type === 'agent' && agentName) {
+                messageDiv.innerHTML = `
+                    <div class="message-header">${agentName}${routedTo ? ` (${routedTo})` : ''}</div>
+                    <div>${formatMessage(text)}</div>
+                `;
+            } else if (type === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="message-header">You</div>
+                    <div>${text}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `<div>${text}</div>`;
+            }
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Format message text (basic formatting)
+        function formatMessage(text) {
+            return text
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+        }
+
+        // Quick action
+        function quickAction(action) {
+            document.getElementById('chatInput').value = action;
+            sendMessage();
+        }
+
+        // Highlight agent card
+        function highlightAgent(agentKey) {
+            const cards = document.querySelectorAll('.agent-card');
+            cards.forEach(card => card.classList.remove('active'));
+            
+            // Try to find and highlight the agent
+            const agentMap = {
+                'flight_search': 0,
+                'flight_booking': 1,
+                'customer_service': 2,
+                'baggage': 3,
+                'check_in': 4,
+                'flight_status': 5,
+                'rewards': 6
+            };
+            
+            if (agentKey && agentMap[agentKey] !== undefined) {
+                cards[agentMap[agentKey]].classList.add('active');
+                setTimeout(() => {
+                    cards[agentMap[agentKey]].classList.remove('active');
+                }, 2000);
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            checkHealth();
+            loadAgents();
+            setInterval(checkHealth, 30000); // Check every 30 seconds
+        });
+    </script>
+</body>
+</html>
+
