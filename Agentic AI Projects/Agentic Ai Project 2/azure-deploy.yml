@@ -1,0 +1,31 @@
+# Azure Container Instances Deployment Configuration
+apiVersion: 2019-12-01
+location: eastus
+name: airlines-multi-agent-system
+properties:
+  containers:
+  - name: airlines-api
+    properties:
+      image: your-registry.azurecr.io/airlines-system:latest
+      resources:
+        requests:
+          cpu: 2
+          memoryInGb: 4
+      ports:
+      - port: 8000
+        protocol: TCP
+      environmentVariables:
+      - name: DATABASE_URL
+        secureValue: your-database-connection-string
+      - name: OPENAI_API_KEY
+        secureValue: your-openai-api-key
+  osType: Linux
+  ipAddress:
+    type: Public
+    ports:
+    - protocol: TCP
+      port: 8000
+    dnsNameLabel: airlines-multi-agent
+  restartPolicy: Always
+
+
