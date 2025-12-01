@@ -1,0 +1,72 @@
+# FastAPI & Web Server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+websockets==12.0
+python-multipart==0.0.6
+
+# AI & LLM
+openai==1.3.7
+langchain==0.1.0
+langchain-openai==0.0.2
+langchain-community==0.0.10
+crewai==0.1.16
+tavily-python==0.3.0
+
+# Vector DB & RAG
+chromadb==0.4.18
+faiss-cpu==1.7.4
+sentence-transformers==2.2.2
+
+# Database
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+pymongo==4.6.0
+redis==5.0.1
+alembic==1.12.1
+
+# Event Streaming
+kafka-python==2.0.2
+confluent-kafka==2.3.0
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+cryptography==41.0.7
+
+# Monitoring & Logging
+prometheus-client==0.19.0
+python-json-logger==2.0.7
+structlog==23.2.0
+
+# Utilities
+pydantic==2.5.2
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+httpx==0.25.2
+aiohttp==3.9.1
+celery==5.3.4
+redis==5.0.1
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+
+# Data Processing
+pandas==2.1.4
+numpy==1.26.2
+
+# Date & Time
+python-dateutil==2.8.2
+
+# Email
+aiosmtplib==3.0.1
+
+# Cloud SDKs
+azure-identity==1.15.0
+azure-keyvault-secrets==4.7.0
+boto3==1.29.7
+
+

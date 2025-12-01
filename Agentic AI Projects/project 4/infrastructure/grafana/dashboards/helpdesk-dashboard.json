@@ -1,0 +1,36 @@
+{
+  "dashboard": {
+    "title": "Agentic AI Help Desk Dashboard",
+    "panels": [
+      {
+        "title": "Ticket Volume",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(tickets_created_total[5m])"
+          }
+        ]
+      },
+      {
+        "title": "Auto-Resolution Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "tickets_auto_resolved_total / tickets_total * 100"
+          }
+        ]
+      },
+      {
+        "title": "SLA Compliance",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "tickets_sla_compliant_total / tickets_resolved_total * 100"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
