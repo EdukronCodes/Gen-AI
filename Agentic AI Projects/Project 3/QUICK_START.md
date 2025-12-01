@@ -1,94 +1,105 @@
-# 🚀 Quick Start Guide
+# ⚡ Quick Start Guide
 
-## Access the Application
+Get up and running in 5 minutes!
 
-Once the server is running, you can access:
+## Prerequisites Checklist
 
-### 🌐 Web UI (Recommended)
-**Open in your browser:**
-```
-http://localhost:8000/ui
-```
+- [ ] Python 3.11+ installed
+- [ ] Node.js 18+ installed
+- [ ] PostgreSQL installed and running
+- [ ] Redis installed and running (optional for now)
+- [ ] Google Gemini API key
 
-### 📡 API Endpoints
+## 1. Backend Setup (2 minutes)
 
-**API Documentation (Swagger):**
-```
-http://localhost:8000/docs
-```
-
-**Alternative API Docs (ReDoc):**
-```
-http://localhost:8000/redoc
-```
-
-**Health Check:**
-```
-http://localhost:8000/api/health
-```
-
-**List All Agents:**
-```
-http://localhost:8000/api/agents
-```
-
-## 🎯 Try These Queries in the UI
-
-1. **Search for flights:**
-   - "Find flights from New York to London"
-   - "Search flights from JFK to LHR"
-
-2. **Check flight status:**
-   - "What's the status of flight AA100?"
-   - "Check flight status"
-
-3. **Baggage information:**
-   - "What is my baggage allowance?"
-   - "Tell me about baggage policies"
-
-4. **Loyalty program:**
-   - "How many points do I have?"
-   - "Tell me about my membership tier"
-
-5. **General inquiries:**
-   - "Help me with my booking"
-   - "What are your cancellation policies?"
-
-## 🔧 If Server is Not Running
-
-Start it manually:
 ```bash
+# Navigate to backend
+cd backend
+
+# Create virtual environment
+python -m venv venv
+
+# Activate (Windows)
+venv\Scripts\activate
+
+# Activate (Mac/Linux)
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Create .env file
+copy .env.example .env  # Windows
+# OR
+cp .env.example .env    # Mac/Linux
+
+# Edit .env and add your GEMINI_API_KEY
+# GEMINI_API_KEY=your_key_here
+
+# Start backend
 python run.py
 ```
 
-Or directly:
+✅ Backend running at `http://localhost:8000`
+
+## 2. Frontend Setup (2 minutes)
+
 ```bash
-python main.py
+# Open new terminal, navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Create .env.local
+copy .env.example .env.local  # Windows
+# OR
+cp .env.example .env.local    # Mac/Linux
+
+# Start frontend
+npm run dev
 ```
 
-Or with uvicorn:
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+✅ Frontend running at `http://localhost:3000`
 
-## 📝 Environment Setup
+## 3. Test It Out (1 minute)
 
-Make sure you have a `.env` file with:
-```
-OPENAI_API_KEY=your_key_here
-DATABASE_URL=sqlite:///./airlines.db
-```
+1. Open browser to `http://localhost:3000`
+2. Click **Campaigns** tab
+3. Fill in the form:
+   - Name: "Test Campaign"
+   - Goal: "Promote my product for 7 days"
+   - Select platforms: Instagram, Twitter
+   - Duration: 7 days
+4. Click **Create Campaign & Generate Strategy**
 
-The system will work without OpenAI API key for basic functionality, but LLM features require it.
+🎉 Watch the AI agents work! The Strategy Agent will create a content plan.
 
-## 🎨 UI Features
+## What Happens Next?
 
-- **Real-time Chat Interface** - Talk to AI agents naturally
-- **Agent Visualization** - See which agent handles your query
-- **Quick Actions** - One-click common queries
-- **System Status** - Monitor agent availability
-- **Responsive Design** - Works on desktop and mobile
+1. **Strategy Agent** analyzes your goal
+2. **Content Writer Agent** generates captions
+3. **Creative Agent** creates visual ideas
+4. **Scheduler Agent** optimizes posting times
+5. Posts are created and stored in database
 
-Enjoy your Multi-Agent Airlines System! ✈️
+## View Your Campaign
 
+- Go to **Dashboard** to see your campaigns
+- Check **Analytics** to see performance (after posts are published)
+
+## Need Help?
+
+- API Docs: `http://localhost:8000/docs`
+- Backend logs: Check terminal where backend is running
+- Frontend errors: Check browser console (F12)
+
+## Next Steps
+
+1. Connect social media platforms (see SETUP.md)
+2. Execute campaigns to actually post
+3. Monitor analytics
+4. Get optimization recommendations
+
+🚀 You're ready to automate your social media!
 
