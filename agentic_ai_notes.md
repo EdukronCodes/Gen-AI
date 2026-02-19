@@ -513,59 +513,59 @@ flowchart LR
 
 ### Using LangChain
 
-- **What it is**: Open-source framework for building chains and agents with LLMs; strong focus on tools, memory, and pluggable components.
+- **What it is**: Open-source **framework** for building **chains** and **agents** with LLMs. It provides a large ecosystem of integrations (vector stores, document loaders, APIs) and abstractions for prompts, tools, memory, and orchestration. Available in **Python** and **JavaScript (LangChain.js)**.
 - **Concepts**:
-  - **Agents**: `AgentExecutor` runs an agent that uses a list of tools; the LLM chooses tools and the executor runs them in a loop.
-  - **Tools**: Wrap functions/APIs with a name and description; LangChain passes them to the LLM and invokes them from the agent output.
-  - **Chains**: Composable sequences (prompt → LLM → parse → next step). Agents are “chains with a tool loop.”
-  - **Memory**: Built-in buffer (e.g., conversation buffer, summary buffer), or custom (vector store, DB).
-- **Flow**: User message → Agent (LLM + tools) → tool calls executed → observations added to history → LLM called again until final answer.
-- **Use when**: Quick prototyping, research, or production agents with many integrations (vector stores, APIs, document loaders). Language: Python/JS.
+  - **Agents**: An **agent** is an LLM plus a list of **tools**. The **AgentExecutor** runs the agent in a loop: call the LLM with the current message history and tool list; parse the output for tool calls; execute those tools; append tool results to the history; repeat until the LLM returns a final answer. LangChain supports multiple agent types (e.g., ReAct, tool-calling, OpenAI functions).
+  - **Tools**: **Tools** are Python/JS functions (or API wrappers) registered with a **name** and **description**. The LLM sees these descriptions and chooses which tool to call and with what arguments. LangChain provides built-in tools (e.g., search, calculator) and makes it easy to define custom tools (e.g., DB query, REST API).
+  - **Chains**: **Chains** are composable pipelines: e.g., prompt template → LLM → output parser → next step. Agents are effectively “chains with a tool loop.” Chains can be combined (e.g., “retrieve docs” chain + “summarize” chain) for RAG or multi-step flows.
+  - **Memory**: **Memory** components store conversation history or other state. Built-in options include **ConversationBufferMemory** (raw last N messages), **ConversationSummaryBufferMemory** (summarize old messages to save tokens), and integration with **vector stores** for long-term or RAG-style memory. Custom memory can be implemented by extending the base memory interface.
+- **Flow**: User message → Agent (LLM + tools + memory) → LLM outputs tool call(s) → executor runs tools → observations added to message history → LLM called again with updated history → … → LLM outputs final answer → return to user.
+- **Use when**: **Quick prototyping**, **research**, or **production** agents that need many integrations (vector stores, document loaders, APIs). Strong fit for RAG, chatbots, and multi-tool agents. Choose LangChain when you want flexibility and a large community; be aware that the API evolves and production deployments often require careful prompt and error handling.
 
 ---
 
 ### Using AutoGPT
 
-- **What it is**: Autonomous agent that tries to accomplish high-level goals by generating its own tasks, using tools (web, file, code), and iterating.
-- **Concepts**: Goal → task list generation → loop: pick task → execute (tool or LLM) → update task list / memory → repeat. Often uses local vector store for memory.
-- **Use when**: Experimentation and demos; less standardized than LangChain/CrewAI, so production use requires careful hardening (cost, loops, safety).
+- **What it is**: **AutoGPT** is an open-source **autonomous agent** that tries to accomplish **high-level goals** (e.g., “Research topic X and write a report”) by **generating its own task list**, then looping: pick a task, execute it (via a tool or LLM sub-call), update the task list and memory, and repeat until the goal is satisfied or a limit is reached. It was one of the early “full autonomy” demos and is often run locally with a local LLM and vector store.
+- **Concepts**: (1) **Goal**—user provides a high-level objective. (2) **Task list**—the agent (or a planner) breaks the goal into concrete tasks (e.g., “search for X,” “read URL Y,” “draft section Z”). (3) **Loop**—the agent picks the next task, executes it (e.g., web search, read file, run Python), updates the task list (mark done, add new tasks), and optionally stores results in a **vector store** for later retrieval. (4) **Memory**—often a local vector DB (e.g., Chroma) so the agent can “remember” what it did and retrieve relevant context. No single standard implementation; different forks emphasize different tools and safety controls.
+- **Use when**: **Experimentation** and **demos** to see how far an agent can get with minimal human intervention. **Production** use is possible but requires careful **hardening**: cost control (cap steps, token limits), loop prevention (max iterations, deadlock detection), and **safety** (allowlists for tools and domains, no arbitrary code execution in sensitive environments). Less standardized than LangChain or CrewAI, so expect to customize and maintain your own fork or wrapper.
 
 ---
 
 ### Using CrewAI
 
-- **What it is**: Framework for **multi-agent** teams with roles, goals, and backstories. Agents are assigned to tasks in a sequence or hierarchy.
+- **What it is**: **CrewAI** is a **Python** framework for building **multi-agent teams** with clearly defined **roles**, **goals**, and **backstories**. You define a set of **agents** and a **crew** (a list of **tasks** assigned to those agents). The crew runs tasks in order; each task’s output can be passed as **context** to the next task, so the workflow is a structured pipeline (e.g., researcher → writer → reviewer).
 - **Concepts**:
-  - **Agent**: Role, goal, backstory, optional tools. Defines “who” the agent is.
-  - **Task**: Description, assigned agent, optional context from other tasks’ outputs.
-  - **Crew**: Set of agents + ordered list of tasks. Crew runs tasks in order; each task’s output can be passed as context to the next.
-- **Flow**: Crew kickoff → Task 1 (Agent A) → Task 2 (Agent B, input = Task 1 output) → … → final output.
-- **Use when**: Role-play teams (e.g., researcher + writer + reviewer), structured pipelines where handoffs are clear. Python.
+  - **Agent**: An agent is defined by a **role** (e.g., “Senior Researcher”), a **goal** (e.g., “Find accurate and relevant information”), and optionally a **backstory** (e.g., “You are an expert in …”) and a list of **tools**. This defines “who” the agent is and how it should behave. Multiple agents can have different roles and tools.
+  - **Task**: A **task** has a **description** (what to do), an **assigned agent** (who does it), and optional **context**—e.g., the output of a previous task. Tasks are executed in the order they appear in the crew. The output of each task is typically passed as context to the next, so you get a clear handoff chain.
+  - **Crew**: A **crew** is the set of **agents** plus an **ordered list of tasks**. When you **kickoff** the crew, it runs Task 1 (Agent A), then Task 2 (Agent B, with Task 1 output as context), and so on until the last task. The final task’s output is the crew’s result. You can also use **hierarchical** crews (a manager agent that delegates to sub-crews) for more complex flows.
+- **Flow**: Crew kickoff → Task 1 (Agent A) → Task 2 (Agent B, input = Task 1 output) → … → final output. No central “orchestrator” loop; the order is fixed by the task list.
+- **Use when**: **Role-play teams** (e.g., researcher + writer + reviewer) and **structured pipelines** where handoffs are known in advance. Good for content creation, research reports, and any workflow that fits a linear or hierarchical task list. Python-only; less flexible than “free-form” agent loops but easier to reason about and debug.
 
 ---
 
 ### Using Microsoft Semantic Kernel
 
-- **What it is**: SDK for integrating LLMs and AI into apps; supports plugins (skills), planning, and memory. Strong .NET and Python support; Azure OpenAI integration.
+- **What it is**: **Semantic Kernel (SK)** is a **Microsoft** SDK for integrating **LLMs and AI** into applications. It emphasizes **plugins** (called “skills” or “plugins”), **planning** (turning a user goal into a sequence of plugin calls), and **memory** (semantic and episodic). It has strong **.NET** and **Python** support and integrates with **Azure OpenAI** and other Azure AI services.
 - **Concepts**:
-  - **Plugins (Skills)**: Functions that the agent can call; defined with descriptions and parameters for the planner.
-  - **Planner**: Creates a plan (sequence of plugin calls) from a user goal; can be LLM-based (e.g., “generate a plan”) or template-based.
-  - **Memory**: Semantic memory (vector store) and optional episodic memory for conversations.
-  - **Orchestration**: Execute plan steps, pass outputs between plugins, handle errors and retries.
-- **Flow**: User request → Planner generates plan → Executor runs each step (plugin call) → results fed back; replan if needed.
-- **Use when**: .NET or Python apps, Azure-heavy stacks, need for planners + plugins + memory in one SDK.
+  - **Plugins (Skills)**: **Plugins** are collections of **functions** that the agent can call. Each function has a name, description, and parameters (with types and descriptions). The **planner** uses these descriptions to decide which plugin/function to call and with what arguments. Plugins can wrap APIs, databases, or local code. SK supports both native code plugins and “semantic” plugins (prompt-based, e.g., “summarize this”).
+  - **Planner**: The **planner** takes the **user request** (goal) and produces a **plan**—a sequence of plugin/function calls. The plan can be **LLM-based** (e.g., “Given this goal and these plugins, output a step-by-step plan”) or **template/rule-based**. The planner can be invoked once or repeatedly (replan after each step if needed).
+  - **Memory**: **Semantic memory** is typically a **vector store** (e.g., embeddings of documents or past interactions) for RAG or long-term recall. **Episodic memory** can store conversation turns or session summaries. SK provides connectors to Azure Cognitive Search and other stores. Memory can be queried and the results injected into the planner or prompts.
+  - **Orchestration**: The **orchestrator** (or execution loop) runs each step of the plan: call the plugin with the planned arguments, capture the result, pass it to the next step or back to the planner for replanning. Error handling and retries are typically implemented in the orchestration layer.
+- **Flow**: User request → Planner generates plan (list of plugin calls) → Executor runs step 1 → result → step 2 → … → final result. If a step fails or the result suggests a new plan, the planner can be invoked again.
+- **Use when**: **.NET or Python** applications, **Azure-heavy** stacks (Azure OpenAI, Azure Cognitive Search), and when you want **planners + plugins + memory** in one SDK with official Microsoft support and enterprise-oriented documentation.
 
 ---
 
 ### Using OpenAI Agent APIs
 
-- **What it is**: OpenAI’s native **assistants** and **runs** API: you define an assistant (model, instructions, tools), then create threads and runs. The API runs the tool loop server-side.
+- **What it is**: OpenAI’s **Assistants API** (and related **Runs** API) lets you define an **assistant**—a combination of model, system instructions, and **tools** (e.g., code interpreter, retrieval, or custom function calling). You then create **threads** (conversation containers) and **runs** (execute the assistant on a thread). The **agent loop** (LLM call → parse tool calls → wait for client to run tools → submit results → continue) is managed **server-side** by OpenAI; your application only needs to **execute** the tools when the API returns “tool calls required” and **submit** the results so the run can continue.
 - **Concepts**:
-  - **Assistant**: Model + system instructions + list of tools (function definitions with names, descriptions, parameters).
-  - **Thread**: Conversation container (messages + optional file IDs).
-  - **Run**: Execute the assistant on a thread; the API calls the LLM, detects tool calls, returns them to the client; client executes tools and submits results; run continues until completion.
-- **Flow**: Create assistant → create thread → create run → (client) handle tool calls → submit tool outputs → run continues → final response.
-- **Use when**: You want OpenAI to own the “agent loop” and you only implement tool execution; good for chat-style agents with code interpreter, retrieval, and function calling.
+  - **Assistant**: An **assistant** is defined by: (1) **Model** (e.g., gpt-4). (2) **Instructions**—system prompt that describes the assistant’s behavior. (3) **Tools**—e.g., **code_interpreter** (run Python in a sandbox), **retrieval** (search over uploaded files), or **function** (custom tools you define with name, description, and parameters in OpenAI’s schema). You create the assistant once and reuse it across threads.
+  - **Thread**: A **thread** holds the **messages** in a conversation (user, assistant, and tool messages). You can attach **files** to the thread for retrieval. Each conversation typically has one thread; you append messages and create runs on that thread.
+  - **Run**: A **run** means “execute the assistant on this thread.” When you create a run, the API calls the LLM with the thread’s messages and the assistant’s tools. If the model outputs **tool calls**, the run enters status “requires_action” and the API returns the list of tool calls to your client. Your client **executes** those tools (e.g., call your API, run a DB query), then **submits** the tool outputs. The run continues; the API calls the LLM again with the tool results. This repeats until the model returns a final text response and the run completes.
+- **Flow**: Create assistant (once) → create thread (per conversation) → create run → when run returns “requires_action,” execute tools and submit outputs → run continues → repeat until run status “completed” → read final message from thread.
+- **Use when**: You want **OpenAI to own** the agent loop (parsing, state, retries) and you only implement **tool execution** on your side. Good for **chat-style agents** with **code interpreter**, **file retrieval**, and **function calling** without building your own loop. Best for rapid prototyping and for apps that are already in the OpenAI ecosystem; for full control over prompts and flow, a custom loop (e.g., with LangChain or your own code) may be preferable.
 
 | Framework / API           | Language / stack   | Strengths                                      | Best for                          |
 |---------------------------|--------------------|------------------------------------------------|-----------------------------------|
@@ -629,33 +629,33 @@ flowchart TB
 
 ### Short-Term Memory
 
-- **Purpose**: Hold the **current** conversation and recent context so the model has a coherent view of the immediate task.
-- **Implementation**: Sliding window of last N messages (user/assistant/tool), or a token-bounded buffer (e.g., last 4K tokens). Often in-memory; not persisted across sessions.
-- **Role**: Prevents context overflow; keeps the prompt focused on “this turn” and “recent turns.” Essential for multi-turn tool-use loops.
+- **Purpose**: Hold the **current** conversation and recent context so the model has a coherent view of the **immediate task**. This includes the last few user messages, assistant replies, and **tool calls and results**—everything needed to decide the next action without exceeding the context window.
+- **Implementation**: (1) **Sliding window**—keep the last N messages (e.g., last 10 turns). (2) **Token-bounded buffer**—keep the last K tokens (e.g., 4K–8K) and drop the oldest messages when the limit is exceeded. (3) Often **in-memory** (e.g., a list in the application); optionally persisted to **Redis** or a **DB** for server restarts or multi-instance consistency so that any worker can resume a conversation.
+- **Role**: Prevents **context overflow** (models have fixed context limits); keeps the prompt focused on “this turn” and “recent turns.” Essential for **multi-turn** and **tool-use** loops because the model must see the last tool result to decide what to do next.
 
 ---
 
 ### Long-Term Memory
 
-- **Purpose**: Persist **facts**, **preferences**, and **learned information** across sessions or tasks.
-- **Implementation**: Database (SQL/NoSQL), knowledge graph, or vector store. Updated by agent actions or background jobs. Retrieved when relevant (e.g., “user prefers X” or “project Y context”).
-- **Role**: Personalization, continuity, and grounding in historical data without stuffing everything into the context window.
+- **Purpose**: Persist **facts**, **user preferences**, and **learned information** across **sessions** or **tasks**. Unlike short-term memory, long-term memory is not limited to the current conversation; it can hold user profiles, project context, or historical outcomes that are retrieved when relevant.
+- **Implementation**: (1) **Relational or document DB**—store key-value or structured records (e.g., “user X prefers metric units,” “project Y context: …”). Retrieve by key or simple query. (2) **Knowledge graph**—store entities and relations for complex queries (e.g., “who works on what”). (3) **Vector store**—store embeddings of past interactions or documents; retrieve by semantic similarity (see Vector Memory). Long-term memory is **updated** by agent actions (e.g., “user said they prefer X”) or by background jobs (e.g., nightly sync from CRM).
+- **Role**: **Personalization** (e.g., user preferences, past choices), **continuity** (e.g., “last time we discussed X”), and **grounding** in historical data without stuffing full history into every prompt. Enables the agent to “remember” across sessions.
 
 ---
 
 ### Episodic Memory
 
-- **Purpose**: Store and recall **past episodes** (events, interactions, outcomes) to reuse successful strategies or avoid past mistakes.
-- **Implementation**: Logs of (state, action, outcome) or summarized “stories”; can be indexed in a vector DB for similarity search (“similar situation in the past?”).
-- **Role**: Enables learning from experience and consistent behavior across similar situations.
+- **Purpose**: Store and recall **past episodes**—concrete events, interactions, and **outcomes**—so the agent can **learn from experience**. Examples: “last time we tried approach A, it failed because …”; “in a similar situation we used tool Z and it worked.” Episodic memory supports **avoiding past mistakes** and **reusing successful strategies**.
+- **Implementation**: (1) **Logs** of (state, action, outcome)—e.g., “user asked X, we called tool Y with args Z, result was W.” (2) **Summarized stories**—e.g., LLM-generated summaries of past episodes to save space. (3) **Vector index**—embed episodes (or their summaries) and at query time do **similarity search** (“find episodes similar to current situation”) and inject the top-k into the prompt. Episodic memory can be implemented on top of a vector DB or a structured store with timestamps and tags.
+- **Role**: Enables **adaptive** and **consistent** behavior: the agent can reference “what worked before” or “what we should avoid” when making decisions. Particularly useful in support or troubleshooting agents that see recurring patterns.
 
 ---
 
 ### Vector Memory
 
-- **Purpose**: Store **embeddings** of text (or other modalities) and retrieve by **semantic similarity**.
-- **Implementation**: Text → embedding model → vector stored in a vector DB (Pinecone, Weaviate, Chroma, pgvector, etc.). At query time: query → embedding → k-NN or similarity search → return top-k chunks.
-- **Role**: Powers RAG, “remember similar past conversations,” and long-term semantic search over documents or history.
+- **Purpose**: Store **embeddings** (dense vectors) of text (or code, images) and retrieve content by **semantic similarity**—e.g., “find documents or past turns most similar to this query.” This powers **RAG** (retrieval-augmented generation), “remember similar past conversations,” and long-term **semantic search** over large corpora.
+- **Implementation**: (1) **Indexing**: Text (e.g., document chunks or conversation turns) → **embedding model** (e.g., OpenAI `text-embedding-3`, Cohere, sentence-transformers) → **vector** stored in a **vector DB** (Pinecone, Weaviate, Chroma, pgvector, Azure Cognitive Search, etc.) with optional metadata (source, timestamp). (2) **Query**: User or agent query → embed query → **k-NN or similarity search** (cosine, dot product, or L2) in the vector DB → return **top-k** chunks or records with metadata. Those chunks are then injected into the prompt as context.
+- **Role**: **RAG** (ground LLM answers in your docs); **semantic recall** (“find past conversations like this”); **long-term memory** when you have too much history to fit in the context window. Vector memory is a core building block for production agents that need to reason over large or evolving knowledge bases.
 
 ---
 
@@ -663,22 +663,22 @@ flowchart TB
 
 ### Embeddings
 
-- **What**: Dense vector representations of text (or code, images) from an embedding model (e.g., OpenAI `text-embedding-3`, Cohere, open-source sentence transformers).
-- **Why**: Enables similarity search: “find content most similar to this query” instead of exact keyword match. Critical for RAG and semantic memory.
+- **What**: **Embeddings** are **dense vector** representations of text (or code, images) produced by an **embedding model**. Each piece of text is mapped to a fixed-size vector (e.g., 1536 or 3072 dimensions) such that **semantically similar** text has **similar vectors** (e.g., high cosine similarity). Models include OpenAI `text-embedding-3`, Cohere Embed, and open-source options (e.g., sentence-transformers, E5).
+- **Why**: They enable **similarity search**: “find the content most similar to this query” instead of exact keyword match. This is **critical for RAG** (retrieve relevant docs, then generate) and for **semantic memory** (recall similar past interactions). Embeddings capture meaning better than bag-of-words or BM25 for many use cases.
 
 ---
 
 ### Similarity Search
 
-- **Process**: Query → embed → search vector store for nearest vectors (cosine similarity, dot product, or L2). Return associated metadata (source doc, timestamp, etc.).
-- **Index types**: HNSW, IVF, or brute-force for small datasets. Trade-off between recall, speed, and memory.
+- **Process**: (1) **Query** (e.g., user question or current situation) is passed through the **same embedding model** to get a query vector. (2) The **vector store** is searched for the **nearest** vectors to the query vector—distance can be **cosine similarity**, **dot product**, or **L2**. (3) The **top-k** results are returned with their **metadata** (e.g., source document, chunk ID, timestamp). That metadata is used to retrieve the actual text chunks to inject into the prompt.
+- **Index types**: **HNSW** (hierarchical navigable small world) and **IVF** (inverted file) are common approximate nearest-neighbor indexes; they trade a small amount of **recall** for **speed** and **memory**. **Brute-force** (exact k-NN) is used for small datasets. Choice depends on scale, latency requirements, and recall needs.
 
 ---
 
 ### RAG (Retrieval-Augmented Generation)
 
-- **Flow**: User question → embed question → retrieve relevant chunks from vector store → build prompt: “Context: … Question: …” → LLM generates answer grounded in context.
-- **Why**: Reduces hallucination; keeps answers up to date with your data. Combines retrieval (vector + optional keyword) with generation.
+- **Flow**: (1) **User question** (or agent query). (2) **Embed** the question with the same embedding model used for the corpus. (3) **Retrieve** the **top-k** most similar chunks from the **vector store** (and optionally combine with keyword search, e.g., BM25, for hybrid retrieval). (4) **Build prompt**: e.g., “Context: [retrieved chunks]. Question: [user question]. Answer based only on the context.” (5) **LLM** generates an answer **grounded** in the provided context.
+- **Why**: **Reduces hallucination** by constraining the model to your data; **keeps answers up to date** because you can re-index documents without retraining the LLM. RAG **combines** retrieval (vector + optional keyword) with generation and is the standard pattern for “ask over your docs” and for grounding agents in private or changing knowledge.
 
 **Flow: RAG (full pipeline)**
 
@@ -714,29 +714,29 @@ flowchart TB
 
 ### Context Compression
 
-- **Goal**: Keep the useful part of history without exceeding context limits. Methods: summarize old turns, drop low-relevance messages, or replace long chunks with short “summaries” plus pointers.
-- **Techniques**: LLM-based summarization of past N turns; sliding window + summary; or “importance scoring” to keep only high-signal messages.
+- **Goal**: Keep the **useful** part of conversation history without **exceeding** the model’s context window. As conversations or tool loops get long, you cannot keep every message; compression reduces token count while preserving the information the model needs to continue correctly.
+- **Techniques**: (1) **LLM-based summarization**—periodically summarize the last N turns into a short paragraph and replace those turns with the summary + “Previous conversation: …”. (2) **Sliding window + summary**—keep the most recent M messages in full; summarize everything older into a “prior context” block. (3) **Importance scoring**—assign a score to each message (e.g., by recency, or by whether it contains tool results or user corrections) and keep only the top-scoring messages up to a token budget. (4) **Drop low-value messages**—e.g., drop redundant tool results or keep only the last tool call per tool name.
 
 ---
 
 ### Memory Pruning
 
-- **Goal**: Remove or downweight old or low-value memories to control cost and noise. Policies: TTL (time-to-live), max items per user, or eviction by “importance” (e.g., recency + relevance).
-- **Use**: Prevents vector stores and buffers from growing unbounded; keeps retrieval quality high.
+- **Goal**: **Remove** or **downweight** old or low-value memories so that **storage and retrieval** stay bounded and **retrieval quality** stays high. Without pruning, vector stores and buffers grow indefinitely, which can increase cost, latency, and noise (irrelevant old items dominating results).
+- **Policies**: (1) **TTL (time-to-live)**—delete or ignore memories older than X days. (2) **Max items per user** (or per session)—when the limit is reached, evict the oldest or lowest-importance item. (3) **Eviction by importance**—score memories by recency, relevance to recent queries, or explicit importance; evict low scores first. (4) **Deduplication**—merge or drop near-duplicate entries (e.g., by embedding similarity) to reduce redundancy.
 
 ---
 
 ### Knowledge Graph Memory
 
-- **Idea**: Store facts as **entities and relations** (e.g., Person–works_at–Company). Query via graph traversal or graph + vector hybrid.
-- **Benefits**: Explicit relations and reasoning paths; good for “who knows what,” “what depends on what,” and compliance/audit. Can be combined with vector search for hybrid retrieval.
+- **Idea**: Store facts as **entities** and **relations** in a **graph** (e.g., Person–works_at–Company, Document–cites–Document). Query by **graph traversal** (e.g., “all people who work at X”) or by **hybrid** (graph + vector): use the graph for relational queries and the vector store for semantic similarity; merge results for the prompt.
+- **Benefits**: **Explicit relations** and **reasoning paths**—good for “who knows what,” “what depends on what,” and **compliance/audit** (traceability). Knowledge graphs support multi-hop reasoning and structured updates. Combined with vector search, you get both semantic recall and relational structure.
 
 ---
 
 ### Hybrid Memory Systems
 
-- **Combination**: Short-term buffer + long-term vector store + (optional) graph or SQL for structured facts. Router or orchestrator decides: “answer from context only,” “retrieve from vector,” or “query graph/DB.”
-- **Use**: Production systems that need conversation context + document RAG + structured data (e.g., user profile, permissions).
+- **Combination**: Use **multiple** memory types together: **short-term buffer** (recent messages), **long-term vector store** (RAG, semantic recall), and optionally **graph or SQL** for structured facts (user profile, permissions, entities). A **router** or **orchestrator** decides, per query or per turn, what to retrieve: e.g., “answer from context only,” “retrieve from vector,” “query graph/DB,” or “merge all.”
+- **Use**: **Production** systems that need **conversation context** (short-term) + **document RAG** (vector) + **structured data** (e.g., user preferences, access control). Hybrid memory lets you use the right source for each type of information and merge them into a single context for the LLM.
 
 **Flow: Hybrid memory (router + merge)**
 
@@ -797,23 +797,23 @@ flowchart TB
 
 ### Function Calling
 
-- **What**: LLM returns a structured **function call** (name + arguments) instead of or in addition to free text. The application executes the function and returns the result to the model.
-- **Schema**: Tools described with name, description, and parameters (JSON Schema). Model chooses which tool to call and with what arguments.
-- **Implementations**: OpenAI function calling, Anthropic tool use, open-source (e.g., with structured output or fine-tuning). Core building block for tool-calling agents.
+- **What**: **Function calling** (or **tool use**) means the LLM returns a **structured** representation of a **function call**—typically **name** of the function and **arguments** (key-value)—instead of or in addition to free text. The **application** executes the corresponding function (or API/tool) and returns the **result** to the model as an **observation** so it can decide the next step. This is the core mechanism for tool-calling agents.
+- **Schema**: Tools are described to the model with a **name**, **description** (natural language so the model knows when to use it), and **parameters** in a schema format (e.g., **JSON Schema**): parameter names, types, and optional descriptions. The model then outputs a matching structure (e.g., `{"name": "search", "arguments": {"query": "..."}}`) that the application parses and executes.
+- **Implementations**: **OpenAI** and **Anthropic** APIs support native tool/function calling in the chat completion response. **Open-source** models can be used with **structured output** (e.g., JSON mode, output parsers) or **fine-tuning** to produce tool calls. Function calling is the main building block for production agents that use tools.
 
 ---
 
 ### API Integration
 
-- **What**: Tools that wrap external APIs (REST, GraphQL). Agent “calls” the tool; backend performs HTTP request, parses response, returns simplified result to the agent.
-- **Best practices**: Timeouts, retries, rate limits; sanitize inputs; avoid exposing raw API keys to the model; log calls for audit and cost.
+- **What**: **API integration** means implementing **tools** that wrap **external APIs** (REST, GraphQL, etc.). When the agent “calls” the tool, the backend performs an **HTTP request** (with auth, headers, body), **parses** the response, and returns a **simplified result** (or error) to the agent so it can reason over it. APIs enable the agent to access live data (e.g., weather, CRM, ticketing) and to trigger actions (e.g., send email, create record).
+- **Best practices**: (1) **Timeouts** and **retries** with backoff so one slow or failing API does not hang the agent. (2) **Rate limits** to respect provider limits and avoid abuse. (3) **Sanitize inputs**—validate and escape arguments before sending to the API to prevent injection or malformed requests. (4) **Do not expose raw API keys** in prompts or logs; use server-side secrets and environment variables. (5) **Log** all API calls (tool name, args sanitized, result summary) for **audit** and **cost** tracking.
 
 ---
 
 ### Structured Outputs
 
-- **What**: Constrain LLM output to a schema (e.g., JSON with required fields). Ensures tool calls (or other structured decisions) are parseable and valid.
-- **Methods**: Prompt engineering (“output JSON”), response format (OpenAI JSON mode), or parsing/validation layer that rejects malformed output and retries.
+- **What**: **Structured outputs** mean constraining the LLM’s response to a **schema**—e.g., a **JSON** object with **required fields** (e.g., `tool`, `args`) and optional fields. This ensures that **tool calls** (or other structured decisions like “intent” or “extracted entities”) are **parseable** and **valid** without relying on brittle regex or free-text parsing.
+- **Methods**: (1) **Prompt engineering**—“Always respond with a JSON object with keys: tool, args.” (2) **Response format**—e.g., **OpenAI JSON mode** or **response_format** that forces valid JSON. (3) **Parsing/validation layer**—parse the output, validate against a schema (e.g., Pydantic, JSON Schema); if invalid, return an error observation to the model and retry or ask the model to fix the format. Structured output reduces parsing errors and makes the agent loop more reliable.
 
 ---
 
@@ -821,29 +821,29 @@ flowchart TB
 
 ### Databases
 
-- **Read**: Tool that runs parameterized queries (e.g., “get orders for customer X”). Use safe patterns (parameterized SQL, read-only role) to avoid injection and accidental writes.
-- **Write**: Optional tools for inserts/updates with strict validation and approval flows in sensitive systems.
+- **Read**: A **read** tool runs **parameterized** queries (e.g., “get orders for customer X”) so the agent can answer questions from your data. Use **parameterized SQL** (or an ORM) to avoid **injection**; use a **read-only** DB role or connection so the agent cannot accidentally modify or delete data. Return results in a concise form (e.g., first N rows, or a summary) to avoid overflowing the context.
+- **Write**: **Write** tools (insert, update, delete) are optional and should be used only when the agent must change data. Apply **strict validation** (e.g., allowed tables/columns, value ranges) and consider **approval flows** or **human-in-the-loop** for sensitive operations (e.g., financial, PII). Log all writes for audit.
 
 ---
 
 ### Web Browsing
 
-- **What**: Tool that fetches URLs, extracts text (or uses a headless browser), and returns content to the agent. Enables “search and read” behavior.
-- **Risks**: Malicious URLs, PII in pages, high latency. Mitigate with allowlists, sandboxing, and content filters.
+- **What**: A **web browsing** tool **fetches** URLs, **extracts** text from the page (or uses a headless browser for JS-rendered content), and **returns** the content to the agent. This enables “search and read” behavior—e.g., the agent can look up current information or read a specific page the user referenced.
+- **Risks**: **Malicious URLs** (phishing, drive-by); **PII** in scraped pages; **high latency** and **unreliable** content (ads, navigation). **Mitigate** with: **allowlists** (only fetch from trusted domains or previously discovered URLs); **sandboxing** (e.g., run fetcher in a restricted network or container); **content filters** (strip scripts, limit size, redact PII); and **timeouts**.
 
 ---
 
 ### Code Execution
 
-- **What**: Tool that runs code (e.g., Python in a sandbox) and returns stdout/result. Enables math, data processing, and scripting.
-- **Risks**: Infinite loops, resource abuse, security. Use timeouts, memory limits, and sandboxed environments (e.g., containers, restricted interpreters).
+- **What**: A **code execution** tool runs **code** (e.g., Python or shell) in a **sandbox** and returns **stdout**, **stderr**, or a structured result. This enables the agent to do **math**, **data processing**, or **scripting** that would be hard or unsafe to do in natural language.
+- **Risks**: **Infinite loops**, **resource abuse** (CPU, memory, disk), and **security** (access to network, filesystem, or secrets). **Mitigate** with: **timeouts** (kill long-running code); **memory and CPU limits**; **sandboxed environments** (e.g., containers, restricted interpreters, no network); and **allowlists** for modules or operations. Never run untrusted code with access to production data or credentials.
 
 ---
 
 ### File Systems
 
-- **What**: Tools to read/write/list files (e.g., project directory, cloud storage). Useful for code agents and document workflows.
-- **Risks**: Path traversal, overwriting critical files. Restrict to allowed paths and operations; prefer read-only or scoped write.
+- **What**: **File system** tools let the agent **read**, **write**, or **list** files in a defined scope (e.g., a project directory, a cloud storage bucket). Useful for **code agents** (read/write source files) and **document workflows** (ingest PDFs, save reports).
+- **Risks**: **Path traversal** (e.g., `../../../etc/passwd`); **overwriting** critical files or deleting data. **Mitigate** by **restricting** to **allowed paths** (e.g., a single project folder), **validating** all paths against a whitelist, and **preferring read-only** or **scoped write** (e.g., only a dedicated “output” directory). Use **least privilege** for the process that runs the tool.
 
 ---
 
@@ -851,29 +851,29 @@ flowchart TB
 
 ### Task Decomposition
 
-- **What**: Break a high-level goal into smaller, executable sub-tasks (e.g., “research” → “search,” “read,” “summarize”). Done by planner LLM or rule-based decomposer.
-- **Output**: Ordered list of steps; each step can be a tool call or a sub-goal for another agent.
+- **What**: **Task decomposition** is the process of breaking a **high-level goal** into smaller, **executable sub-tasks**. For example, “research topic X and write a report” might become: (1) search for recent articles on X, (2) read the top 3 results, (3) extract key points, (4) draft a summary, (5) format and return. Decomposition can be done by a **planner LLM** (“Given this goal, list the steps”) or by a **rule-based** decomposer (templates per goal type).
+- **Output**: An **ordered list** of steps; each step can be a **tool call** (e.g., “call search with query X”), a **sub-goal** for another agent (e.g., “writer agent: draft section 2”), or a **checkpoint** (e.g., “verify we have enough sources”). The executor then runs steps in order (or in parallel when the plan is a DAG) and reports results back for replanning if needed.
 
 ---
 
 ### Planning
 
-- **What**: Produce a **plan** (sequence of actions or sub-goals) before or during execution. Can be static (one plan) or dynamic (replan after each step).
-- **Formats**: Natural language steps, structured JSON (e.g., step id, action, args), or DAG for parallel branches.
+- **What**: **Planning** is the process of producing a **plan**—a sequence of **actions** or **sub-goals**—before or during execution. Plans can be **static** (created once and then executed) or **dynamic** (replan after each step or when an error occurs). The plan guides the executor and can be updated when the world state or observations suggest a better path.
+- **Formats**: (1) **Natural language** steps (e.g., “Step 1: Search for X. Step 2: Read the first result.”)—flexible but requires parsing. (2) **Structured JSON** (e.g., step id, action type, tool name, args)—machine-readable and easy to execute. (3) **DAG** (directed acyclic graph) when steps can run in **parallel** or have dependencies (e.g., step 2 and 3 both depend on step 1). Planning formats should match what the executor and replanner expect.
 
 ---
 
 ### Retry Mechanisms
 
-- **What**: On tool or API failure, retry with backoff (exponential, jitter). Optional: retry with different params or fallback tool.
-- **Policies**: Max retries, timeout, circuit breaker for repeatedly failing services. Prevents one failing tool from killing the whole run.
+- **What**: When a **tool or API call fails** (e.g., timeout, 5xx, rate limit), **retry** the call with **backoff** (e.g., exponential backoff with jitter) to handle transient failures. Optionally, retry with **different parameters** (e.g., smaller page size) or switch to a **fallback tool** (e.g., different search API) if the primary keeps failing.
+- **Policies**: Set **max retries** (e.g., 3) and **timeout** per attempt so the agent does not hang. For repeatedly failing **services**, use a **circuit breaker** (stop calling for a period after N failures) to avoid cascading failures. Retry logic prevents a single transient failure from killing the whole run and gives the agent a chance to succeed on a later attempt.
 
 ---
 
 ### Error Handling
 
-- **What**: Catch tool errors, timeouts, and invalid outputs; present a concise “observation” to the agent (e.g., “Tool X failed: timeout”). Agent can then retry, skip, or ask for help.
-- **Production**: Log errors, alert on repeated failures, and optionally escalate to human or fallback workflow.
+- **What**: **Error handling** means **catching** tool errors, timeouts, and invalid outputs and presenting a **concise observation** to the agent (e.g., “Tool search failed: timeout after 10s” or “Tool DB query failed: invalid parameter”). The agent then sees the failure in its context and can **retry** (e.g., with different args), **skip** (e.g., try another tool), or **ask for help** (e.g., “I couldn’t complete X because …”). Do not let raw stack traces or huge payloads overflow the prompt; summarize errors for the model.
+- **Production**: **Log** all errors (tool name, args, error type, timestamp) for debugging. **Alert** on repeated failures (e.g., same tool failing many times) to detect outages or misconfiguration. Optionally **escalate** to a **human** or **fallback workflow** (e.g., “default answer” or “please try again later”) when the agent cannot recover.
 
 **Flow: Autonomous task execution (full)**
 
@@ -949,31 +949,31 @@ flowchart TB
 
 ### Scalable Architecture
 
-- **Horizontal scaling**: Stateless agent services behind a load balancer; scale out with traffic. Session/context stored in Redis or DB, not in process.
-- **Async**: Use queues (e.g., Azure Service Bus, RabbitMQ) for agent tasks so API stays responsive; workers consume and run agent loops.
-- **Caching**: Cache embeddings, tool results, and LLM responses where safe to reduce cost and latency.
+- **Horizontal scaling**: Run **stateless** agent services behind a **load balancer**; add or remove instances based on traffic. **Session and context** (conversation history, current plan) must be stored in **Redis** or a **DB**, not in process memory, so any instance can resume a conversation. Use **sticky sessions** only if you must keep state in-process; otherwise prefer stateless + external store for better scalability.
+- **Async**: Use a **message queue** (e.g., Azure Service Bus, RabbitMQ, SQS) for **agent tasks**: the API accepts the request, enqueues a job, and returns a “processing” or job ID; **workers** consume jobs and run the agent loop. This keeps the API **responsive** and allows you to scale workers independently. For long-running agent runs, async is usually necessary.
+- **Caching**: **Cache** embeddings (same query → same vector), **tool results** (e.g., search results for the same query within a TTL), and **LLM responses** (e.g., for identical prompts) where safe—i.e., when staleness is acceptable. Caching reduces **cost** (fewer API and LLM calls) and **latency**. Invalidate or TTL caches appropriately.
 
 ---
 
 ### Microservices-Based Agent Systems
 
-- **Idea**: Separate services for: (1) API/gateway, (2) agent orchestration, (3) tool execution, (4) memory/RAG, (5) monitoring. Each scales and deploys independently.
-- **Benefits**: Clear boundaries, language flexibility, and easier security (e.g., tool runner in a locked network).
+- **Idea**: Split the system into **separate services** that can scale and deploy independently: (1) **API/gateway**—auth, rate limit, request routing; (2) **Agent orchestration**—runs the agent loop (LLM calls, tool routing); (3) **Tool execution**—runs tools (APIs, DB, code) in a controlled environment; (4) **Memory/RAG**—vector store, conversation store, retrieval; (5) **Monitoring**—logs, metrics, traces. Each service has a clear boundary and can be implemented in different languages or stacks.
+- **Benefits**: **Clear boundaries** (e.g., tool runner can be locked down and scaled separately); **language flexibility** (orchestrator in Python, tools in Go); **easier security** (e.g., tool runner in a private network with no direct user access). Trade-off is operational complexity (more services to deploy and monitor).
 
 ---
 
 ### Event-Driven Agents
 
-- **Idea**: Agents triggered by **events** (e.g., “new ticket,” “file uploaded,” “alert”). Event bus (Kafka, Event Grid) → agent service → actions → possibly emit new events.
-- **Use**: Loose coupling, replay, and scaling by partition. Fits async and background workflows.
+- **Idea**: Agents are **triggered by events** (e.g., “new ticket created,” “file uploaded,” “alert fired”) instead of (or in addition to) user requests. An **event bus** (Kafka, Azure Event Grid, etc.) publishes events; the **agent service** subscribes, runs the agent loop (e.g., “triage this ticket,” “process this file”), and may **emit new events** (e.g., “ticket triaged,” “report generated”) for downstream consumers.
+- **Use**: **Loose coupling** between producers and the agent; **replay** of events for debugging or recovery; **scaling by partition** (e.g., partition by tenant or topic). Fits **async** and **background** workflows (e.g., nightly reports, incident response).
 
 ---
 
 ### Orchestration Patterns
 
-- **Central orchestrator**: One service runs the agent loop and calls out to tools and memory. Simple; orchestrator is the bottleneck.
-- **Choreography**: Agents and tools emit events; no central brain. Flexible but harder to reason about and debug.
-- **Saga / workflow engine**: Long-running workflow with defined steps and compensation. Use for multi-step business processes with rollback.
+- **Central orchestrator**: A **single** service (or process) runs the **agent loop** and calls out to tools and memory. Simple to reason about and debug; all control flow is in one place. The orchestrator can become a **bottleneck** (CPU or rate limits); scale by running multiple orchestrator instances with shared state (queue, DB).
+- **Choreography**: There is **no central** orchestrator; **agents and tools** emit **events** and react to events from others. Workflow emerges from event flow. **Flexible** and **scalable** but **harder** to reason about and debug (distributed control flow). Good when you have many independent agents or tools that react to each other.
+- **Saga / workflow engine**: For **long-running** workflows with **multiple steps** and **compensation** (rollback), use a **saga** pattern or a **workflow engine** (e.g., Temporal, Azure Durable Functions). Each step is executed and can be compensated if a later step fails. Use for **multi-step business processes** (e.g., order fulfillment, approval chains) where consistency and rollback matter.
 
 ---
 
