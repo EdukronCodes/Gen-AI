@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retail-support-backend
+  labels:
+    app: retail-support-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: retail-support-backend
+  template:
+    metadata:
+      labels:
+        app: retail-support-backend
+    spec:
+      containers:
+        - name: backend
+          image: retail-support-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: retail-support-secrets
+                  key: database-url
+            - name: REDIS_URL
+              value: redis://redis:6379/0
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: retail-support-secrets
+                  key: jwt-secret
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: retail-support-secrets
+                  key: secret-key
+            - name: CORS_ORIGINS
+              value: "http://localhost:3000,http://retail-support-frontend"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: retail-support-backend
+spec:
+  selector:
+    app: retail-support-backend
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: ClusterIP

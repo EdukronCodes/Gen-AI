@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retail-support-frontend
+  labels:
+    app: retail-support-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: retail-support-frontend
+  template:
+    metadata:
+      labels:
+        app: retail-support-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: retail-support-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: VITE_API_URL
+              value: ""
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: retail-support-frontend
+spec:
+  selector:
+    app: retail-support-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
