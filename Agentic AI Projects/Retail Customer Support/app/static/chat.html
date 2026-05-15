@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retail Support Chat</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0f1419; color: #e8edf4; min-height: 100vh; display: flex; flex-direction: column; }
+    header { padding: 1rem 1.5rem; background: #1a2332; border-bottom: 1px solid #2d3a4f; display: flex; justify-content: space-between; align-items: center; }
+    #messages { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .msg { max-width: 80%; padding: 0.75rem 1rem; border-radius: 10px; line-height: 1.5; }
+    .user { align-self: flex-end; background: #3b82f6; }
+    .bot { align-self: flex-start; background: #1e2a3a; border: 1px solid #2d3a4f; }
+    footer { padding: 1rem 1.5rem; background: #1a2332; border-top: 1px solid #2d3a4f; }
+    button { padding: 0.35rem 0.65rem; background: #0f1419; border: 1px solid #2d3a4f; color: #8b9cb3; border-radius: 16px; cursor: pointer; margin: 0.2rem; }
+    input { flex: 1; padding: 0.7rem; background: #0f1419; border: 1px solid #2d3a4f; border-radius: 6px; color: #fff; }
+    .submit-btn { padding: 0.7rem 1.2rem; background: #3b82f6; border: none; border-radius: 6px; color: #fff; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Retail Support Chat</h1>
+    <select id="email">
+      <option value="alice@example.com">alice@example.com</option>
+      <option value="bob@example.com">bob@example.com</option>
+      <option value="carol@example.com">carol@example.com</option>
+    </select>
+  </header>
+  <div style="padding:0.75rem 1.5rem;background:#1e2a3a;font-size:0.85rem;color:#8b9cb3">
+    Dummy data: Orders ORD-10001, ORD-10002, ORD-10003 | Refunds REF-5001
+  </div>
+  <div id="messages"></div>
+  <footer>
+    <div style="margin-bottom:0.6rem">
+      <button type="button" onclick="send('Where is order ORD-10002?')">Track ORD-10002</button>
+      <button type="button" onclick="send('Refund for ORD-10001')">Refund ORD-10001</button>
+      <button type="button" onclick="send('Recommend electronics')">Electronics</button>
+      <button type="button" onclick="send('I am frustrated, speak to a manager')">Escalate</button>
+    </div>
+    <form id="form" style="display:flex;gap:0.5rem">
+      <input id="input" placeholder="Type a message..." />
+      <button type="submit" class="submit-btn">Send</button>
+    </form>
+  </footer>
+  <script>
+    let sessionId = null;
+    const msgs = document.getElementById('messages');
+    function add(role, text, agent) {
+      const d = document.createElement('div');
+      d.className = 'msg ' + role;
+      if (agent) d.innerHTML = '<small style="color:#3b82f6">' + agent + '</small><br>' + text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+      else d.textContent = text;
+      msgs.appendChild(d);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+    add('bot', "Hi! I can track orders, handle refunds, recommend products, and escalate. How can I help?", 'customer_support');
+    async function send(text) {
+      add('user', text);
+      const res = await fetch('/api/v1/customer/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, customer_email: document.getElementById('email').value, session_id: sessionId })
+      });
+      const data = await res.json();
+      sessionId = data.session_id;
+      add('bot', data.reply, data.agent);
+    }
+    document.getElementById('form').onsubmit = function(e) {
+      e.preventDefault();
+      var i = document.getElementById('input');
+      if (i.value.trim()) { send(i.value.trim()); i.value = ''; }
+    };
+  </script>
+</body>
+</html>
